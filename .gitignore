@@ -1,0 +1,6 @@
+node_modules
+.env
+secretKey.dart
+google-services.json
+serviceAccountKey.json
+notesuper-2ce35-firebase-adminsdk-fbsvc-1c5d07c450.json

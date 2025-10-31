@@ -1,0 +1,39 @@
+<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+  <div class="container">
+    <div class="navbar-header">
+      <!-- Button for smallest screens -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand" href="/"><img src="images/ic_launcher.png" alt="Manage ProService" style="width: 60px;">&nbsp;Manage ProService</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav pull-right">
+        {{#if user}}
+        <li class="active"><a href="/">Inicio</a></li>
+        <li><a href="#">Acerca de</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/admin">Servicios Escalera</a></li>
+            <li class="active"><a href="#">Admin Usuarios</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Contacto</a></li>
+        <li class="nav-item">
+          <a href="/profile" class="nav-link">Perfil</a>
+        </li>
+        <li class="nav-item">
+          <a href="/logout" class="nav-link">Cerrar sesión</a>
+        </li>
+        {{else}}
+          <li class="active"><a href="/">Inicio</a></li>
+          <li><a href="#">Acerca de</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li class="nav-item">
+            <a class="btn" href="/signin" class="nav-link">Iniciar sesión</a>
+          </li>
+        {{/if}}
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div> 
+<!-- /.navbar -->
