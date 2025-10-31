@@ -23,7 +23,7 @@ router.get('/admin', async (req, res) => {
       data: data
     });
 
-    console.log(data);
+    // console.log(data);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error al obtener los servicios');
