@@ -2,7 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const { engine } = require('express-handlebars');
 const cors = require('cors');
-var morgan = require('morgan')
 const path = require('path');
 const dotenv = require('dotenv');
 const { v2: cloudinary } = require('cloudinary');
@@ -21,7 +20,6 @@ const app = express();
 const port = process.env.PORT || 80;
 
 // Middleware
-app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 

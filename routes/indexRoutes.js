@@ -6,12 +6,11 @@ const { admin, db } = require('../lib/firebase');
 router.get('/', async (req, res) => {
   const snapshot = await db.collection('escalera').get();
   const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  res.render('download', {              // 👈 Renderiza views/home.hbs
+  res.render('download', {              
     title: 'Página de Inicio',
     name: 'Carlos',
   });
 
-  // console.log(data);
 });
 
 router.get('/admin', async (req, res) => {
