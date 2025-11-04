@@ -8,24 +8,17 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav pull-right">
         {{#if user}}
-        <li class="active"><a href="/">Inicio</a></li>
-        <li><a href="#">Acerca de</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="/admin">Servicios Escalera</a></li>
-            <li class="active"><a href="#">Admin Usuarios</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Contacto</a></li>
-        <li class="nav-item">
-          <a href="/profile" class="nav-link">Perfil</a>
-        </li>
-        <li class="nav-item">
-          <a href="/logout" class="nav-link">Cerrar sesión</a>
-        </li>
+          <li class=""><a href="/">Inicio</a></li>
+          <li><a href="#">Acerca de</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li class="nav-item">
+            <a href="/profile" class="nav-link">Perfil/Panel</a>
+          </li>
+          <li class="nav-item">
+            <a href="/logout" class="nav-link">Cerrar sesión</a>
+          </li>
         {{else}}
-          <li class="active"><a href="/">Inicio</a></li>
+          <li class=""><a href="/">Inicio</a></li>
           <li><a href="#">Acerca de</a></li>
           <li><a href="#">Contacto</a></li>
           <li class="nav-item">
