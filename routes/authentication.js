@@ -26,8 +26,8 @@ router.get('/signin', isNotLoggedIn, async (req,res) => {
 router.post('/signin', isNotLoggedIn, (req,res, next) => {
 
     passport.authenticate('local.signin', {
-        successRedirect: '/',
-        failureRedirect: '/admin',
+        successRedirect: '/profile',
+        failureRedirect: '/signin',
         failureFlash: true
     })(req, res, next);
 });
@@ -36,9 +36,16 @@ router.get('/profile', isLoggedIn, (req,res) => {
     res.render('profile');
 });
 
-router.get('/logout', isLoggedIn, (req, res) => {
-    req.logOut();
-    res.redirect('/signin');
+router.get('/logout', isLoggedIn, (req, res, next) => {
+  req.logout(err => {
+    if (err) return next(err);
+
+    // destruye la sesión del servidor (opcional pero recomendado)
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid'); // limpia la cookie de sesión
+      res.redirect('/signin');
+    });
+  });
 });
 
 module.exports = router;

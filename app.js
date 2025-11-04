@@ -4,6 +4,7 @@ const { engine } = require('express-handlebars');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const moment = require('moment');
 const { v2: cloudinary } = require('cloudinary');
 const fs = require('fs');
 const { admin, db } = require('./lib/firebase');
@@ -42,7 +43,22 @@ app.engine('.hbs', engine({
   extname: '.hbs',
   defaultLayout: 'main', // layout general, no la vista específica
   helpers: {
-    eq: (a, b) => a === b
+    eq: (a, b) => a === b,
+     // 🔹 Helper para formatear fechas
+    formatDate: (timestamp) => {
+      if (!timestamp) return '';
+      let date;
+      // Si es un objeto de Firestore Timestamp
+      if (timestamp._seconds) {
+        date = new Date(timestamp._seconds * 1000);
+      } 
+      // Si ya es un Date o string
+      else {
+        date = new Date(timestamp);
+      }
+
+      return moment(date).format('DD/MM/YYYY, HH:mm');
+    }
   },
   layoutsDir: path.join(app.get('views'), 'layouts'), 
   partialsDir: path.join(app.get('views'), 'partials'), 
@@ -50,6 +66,7 @@ app.engine('.hbs', engine({
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+// middlewares
 // Configuración del almacenamiento de sesión en Firebase
 app.use(session({
   store: new FirestoreStore({ collection: 'sessions' }),
@@ -64,6 +81,13 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Globlas Variables
+app.use((req, res, next) => {
+  res.locals.user = req.user || null; // esto hace que {{user}} esté disponible en TODAS las vistas
+  next();
+});
+
+// Routes
 app.use(require('./routes/indexRoutes'));
 app.use(require('./routes/authentication'));
 

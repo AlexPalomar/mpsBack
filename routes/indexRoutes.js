@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { admin, db } = require('../lib/firebase');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
 // Ruta principal
 router.get('/', async (req, res) => {
@@ -8,22 +9,51 @@ router.get('/', async (req, res) => {
   const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   res.render('download', {              
     title: 'Página de Inicio',
-    name: 'Carlos',
+    user: 'Carlos',
   });
 
 });
 
-router.get('/admin', async (req, res) => {
+router.get('/admin', isLoggedIn, async (req, res) => {
   try {
     const snapshot = await db.collection('escalera').get();
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     res.render('adminServices', {              
       title: 'Servicios Escalera',
-      data: data
+      data: data,
     });
 
     // console.log(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al obtener los servicios');
+  }
+});
+
+router.post('/admin', isLoggedIn, async (req, res) => {
+  try {
+    const filter = req.body
+    if(filter.filter == null || filter.search == ''){
+
+      const snapshot = await db.collection('escalera').get();
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      res.render('adminServices', {              
+        title: 'Servicios Escalera',
+        data: data,
+      });
+    } else {
+      const snapshot = await db.collection('escalera').where(filter.filter, '==', filter.search).get();
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+      res.render('adminServices', {              
+        title: 'Servicios Escalera',
+        data: data,
+      });
+
+    }
+
   } catch (err) {
     console.error(err);
     res.status(500).send('Error al obtener los servicios');
