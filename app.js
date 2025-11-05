@@ -58,7 +58,8 @@ app.engine('.hbs', engine({
       }
 
       return moment(date).format('DD/MM/YYYY, HH:mm');
-    }
+    },
+    json: context => JSON.stringify(context)
   },
   layoutsDir: path.join(app.get('views'), 'layouts'), 
   partialsDir: path.join(app.get('views'), 'partials'), 
@@ -89,6 +90,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require('./routes/indexRoutes'));
+app.use(require('./routes/reportRoutes'));
 app.use(require('./routes/authentication'));
 
 

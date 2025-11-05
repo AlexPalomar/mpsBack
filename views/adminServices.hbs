@@ -3,7 +3,7 @@
 
   <!-- Scroll vertical y horizontal con Bootstrap -->
   <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
-    <div class="container">
+    <div class="container-main">
       <form action="/admin" method="POST" class="form-inline">
         <select class="form-select col-md-2" name="filter" id="filter-option">
           <option value="null">Opción a filtrar</option>
@@ -12,7 +12,7 @@
           <option value="driver">Conductor</option>
         </select>
         <input type="text-capitalize" name="search" class="col-md-6" id="search" placeholder="Búsqueda">
-        <button class="btn btn-secondary col-md-4" type="submit">Consultar</button>
+        <button class="btn btn-success col-md-4" type="submit">Consultar</button>
       </form>
     </div>
     <table class="table table-bordered table-hover align-middle" id="adminTable">

@@ -1,0 +1,89 @@
+<div class="main-container my-5 align-items-center">
+  <h1 class="mb-4 text-center">{{title}}</h1>
+
+  <!-- Scroll vertical y horizontal con Bootstrap -->
+  <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
+    <div class="container-main">
+      <form action="/adminUsers" method="POST" class="form-inline">
+        <select class="form-select col-md-2" name="filter" id="filter-option">
+          <option value="null">Opción a filtrar</option>
+          <option value="identification">Identificación</option>
+          <option value="name">Nombre</option>
+          <option value="role">Role</option>
+          <option value="status">Estado</option>
+        </select>
+        <input type="text-capitalize" name="search" class="col-md-6" id="search" placeholder="Búsqueda">
+        <button class="btn btn-success col-md-4" type="submit">Consultar</button>
+      </form>
+    </div>
+    <table class="table table-bordered table-hover align-middle" id="adminTable">
+
+      <thead class="table-dark">
+        <tr>
+          <th class="bg-th">#</th>
+          <th class="bg-th">Identificación</th>
+          <th class="bg-th">Nombre</th>
+          <th class="bg-th">Role</th>
+          <th class="bg-th">Correo</th>
+          <th class="bg-th">Feche Creación</th>
+          <th class="bg-th">Estado</th>
+          <th class="bg-th">Editar</th>
+          <th class="bg-th">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each user}}
+        <tr>
+          <td>{{@index}}</td>
+          <td><span class="badge badge-service bg-primary">{{identification}}</span></td>
+          <td class="text-uppercase">{{name}}</td>
+          <td >{{role}}</td>
+          <td >{{email}}</td>
+          <td>{{formatDate createdAt}}</td>
+          <td>
+            {{#if (eq status "ACTIVO")}}
+              <span class="btn btn-success">{{status}}</span>
+            {{else}}
+              <span class="btn btn-danger text-ligth">{{status}}</span>
+            {{/if}}
+          </td>
+          <td>
+            <button type="button" class="btn btn-warning btn-edit"><img src="/assets/images/pen-to-square-solid-white.svg" style="width: 24px; color: white" alt=""></button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-danger"><img src="/assets/images/trash-solid-white.svg" style="width: 24px; color: white" alt=""></button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 🔹 Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Editar Usuario</h3>
+
+    <form id="editForm">
+      <label>Identificación</label>
+      <input type="text" id="editId" name="identification" readonly>
+
+      <label>Nombre</label>
+      <input type="text" id="editName" name="name" required>
+
+      <label>Role</label>
+      <input type="text" id="editRole" name="role" required>
+
+      <label>Correo</label>
+      <input type="email" id="editEmail" name="email" required>
+
+      <label>Estado</label>
+      <input type="text" id="editStatus" name="status" required>
+
+      <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    </form>
+  </div>
+</div>
+

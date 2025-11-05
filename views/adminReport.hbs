@@ -1,0 +1,130 @@
+<div class="main-container my-5 align-items-center">
+  <h1 class="mb-4 text-center">{{title}}</h1>
+</div>
+
+<!-- En tu vista .hbs -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 btn btn-default btn-lg">
+      <a href="/export-users" target="_blank">Exportar Usuarios</a>
+    </div>
+    <div class="col-md-4 btn btn-default btn-lg">
+      <a href="/export-services" target="_blank">Exportar Servicios</a>
+    </div>
+    <div class="col-md-4 btn btn-default btn-lg">
+      <a href="#" target="_blank">Exportar Excel</a>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="text-center col-md-4">
+      <canvas id="chart-bar" style="max-width: 300px; max-height: 240px;"></canvas>
+    </div>
+    <div class="text-center col-md-4">
+      <canvas id="chart-line" style="max-width: 300px; max-height: 240px;"></canvas>
+    </div>
+    <div class="text-center col-md-4">
+      <canvas id="chart-line2" style="max-width: 300px; max-height: 240px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctxb = document.getElementById('chart-bar');
+  const ctxl = document.getElementById('chart-line');
+  const cfg = document.getElementById('chart-line2');
+
+  // Los datos vienen del servidor
+  const labels = {{{json labels}}};  // ejemplo: ["Enero", "Febrero", "Marzo"]
+  const data = {{{json report}}};      // ejemplo: [10, 20, 15]
+  console.log(labels);
+  new Chart(ctxb, {
+    type: 'doughnut', // Cambia a 'pie', 'line', 'radar', etc.
+    data: {
+      labels: ['Usuarios', 'Servicios', 'Completados'],
+      datasets: [{
+        label: 'Servicios',
+        data: data,
+        backgroundColor: ['#4e73df','#1cc88a', '#ff9f40','#36b9cc']
+      }]
+      /*labels: ['Usuarios', 'Servicios', 'Completados'],
+      datasets: [{
+        label: 'Servicios',
+        data: report,
+        backgroundColor: ['#36b9cc', '#ff9f40', '#36b9cc']
+        /*!-- backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#ff9f40'] 
+      }]*/
+    }
+  });
+  /*new Chart(ctxl, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Servicios',
+        data: [100, 200, 150, 350],
+        borderWidth: 1,
+        backgroundColor: '#4e73df'
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Meses', // 👈 Etiqueta del eje X
+            color: '#333',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Cantidad de Ventas', // 👈 Etiqueta del eje Y
+            color: '#333',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        }
+      }
+    }
+  });
+  */
+  
+  new Chart(ctxl, {
+  type: 'polarArea', // Cambia a 'pie', 'line', 'radar', etc.
+  data: {
+    labels: ['Usuarios', 'Servicios', 'Completados'],
+      datasets: [{
+        label: 'Servicios',
+        data: data,
+        backgroundColor: ['#1cc88a', '#36b9cc', '#ff9f40']
+      }]
+  }
+});
+  new Chart(cfg, {
+  type: 'doughnut', // Cambia a 'pie', 'line', 'radar', etc.
+  data: {
+    labels: ['Usuarios', 'Servicios', 'Completados'],
+      datasets: [{
+        label: 'Servicios',
+        data: data,
+        backgroundColor: ['#4e73df','#1cc88a', '#36b9cc', '#ff9f40']
+      }]
+    /*
+    labels: ['Enero', 'Febrero', 'Marzo'],
+    datasets: [{
+      label: 'Servicios',
+      data: [100, 200, 150, 350],
+      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#ff9f40']
+    }]*/
+  }
+});
+</script>
+
