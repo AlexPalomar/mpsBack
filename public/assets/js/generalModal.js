@@ -35,14 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Evento guardar
-  editForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Datos guardados:\n' + 
-      document.getElementById('editId').value + '\n' +
-      document.getElementById('editName').value + '\n' + 
-      document.getElementById('editRole').value + '\n' +
-      document.getElementById('editEmail').value) + '\n' +
-      document.getElementById('editStatus').value;
-    modal.style.display = 'none';
-  });
+  // editForm.addEventListener('submit', (e) => {
+  //   e.preventDefault();
+  //   alert('Datos guardados:\n' + 
+  //     document.getElementById('editId').value + '\n' +
+  //     document.getElementById('editName').value + '\n' + 
+  //     document.getElementById('editRole').value + '\n' +
+  //     document.getElementById('editEmail').value) + '\n' +
+  //     document.getElementById('editStatus').value;
+  //   modal.style.display = 'none';
+  // });
+
+  
 });

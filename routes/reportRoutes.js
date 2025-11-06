@@ -4,40 +4,51 @@ const ExcelJS = require('exceljs');
 const { admin, db } = require('../lib/firebase');
 const { isLoggedIn } = require('../lib/auth');
 const moment = require('moment');
-const { Timestamp } = require('firebase-admin/firestore');
 
 router.get('/adminReport', isLoggedIn, async (req, res)=> {
 
-  const labels = ['Usuarios', 'Servicios', 'Completados'];
-  const data = [10, 20, 15];
-
-  // cuenta usuarios
+  // cuenta todos los registros de usuarios
   const snapshot = await db.collection('user').get();
-  const totalUsers = snapshot.size; // 👈 cantidad total de documentos
+  const totalUsers = snapshot.size;
 
-  console.log('Total de usuarios:', totalUsers);
+  // cuenta todos los registros de usuarios segun el rol
+  const adminSnapshot = await db.collection('user')
+  .where('role', '==', 'ADMIN')
+  .get();
+  const adminCount = adminSnapshot.size;
 
-  // cuenta todos los servicios
+  const driverSnapshot = await db.collection('user')
+  .where('role', '==', 'DRIVER')
+  .get();
+  const driverCount = driverSnapshot.size;
+
+  const tecnicoSnapshot = await db.collection('user')
+  .where('role', '==', 'TECNICO')
+  .get();
+  const tecnicoCount = tecnicoSnapshot.size;
+
+  // cuenta todos los servicios de escalera
   const snapshotServices = await db.collection('escalera').get();
   const totalServices = snapshotServices.size;
 
-  console.log('Total de servicios:', totalServices);
-
   // cuenta servicios filtrados por estado
-
   const completedSnapshot = await db.collection('escalera')
-  .where('status', '==', 'Completado')
+  .where('status', '==', 'COMPLETADO')
   .get();
-
   const completedCount = completedSnapshot.size;
 
-  console.log('Servicios Completados:', completedCount);
+  const canceledSnapshot = await db.collection('escalera')
+  .where('status', '==', 'CANCELADO')
+  .get();
+  const canceledCount = canceledSnapshot.size;
+
 
   res.render('adminReport', {              
     title: 'Administración de Reportes',
-    report: [totalUsers, totalServices, completedCount],
-    labels: JSON.stringify(labels),
-    data: JSON.stringify(data)
+    reportUsers: [adminCount, driverCount, tecnicoCount, totalUsers],
+    reportServices: [completedCount, canceledCount, totalServices ],
+    // labels: JSON.stringify(labels),
+    // data: JSON.stringify(data)
   });
 });
 
@@ -151,51 +162,5 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
   }
 });
 
-router.get('/export-backup', isLoggedIn, async (req, res) => {
-  try {
-    // Crear un nuevo libro
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Usuarios');
-
-    // Definir las columnas
-    worksheet.columns = [
-      { header: 'ID', key: 'id', width: 10 },
-      { header: 'Nombre', key: 'name', width: 30 },
-      { header: 'Correo', key: 'email', width: 30 },
-      { header: 'Rol', key: 'role', width: 20 },
-      { header: 'Estado', key: 'status', width: 15 }
-    ];
-
-    // Agregar datos (ejemplo)
-    const users = [
-      { id: 1, name: 'Juan Pérez', email: 'juan@example.com', role: 'Admin', status: 'Activo' },
-      { id: 2, name: 'María López', email: 'maria@example.com', role: 'Técnico', status: 'Inactivo' },
-    ];
-
-    worksheet.addRows(users);
-
-    // Estilos (opcional)
-    worksheet.getRow(1).font = { bold: true };
-    worksheet.getRow(1).alignment = { horizontal: 'center' };
-
-    // Enviar el archivo al cliente
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    );
-    res.setHeader(
-      'Content-Disposition',
-      'attachment; filename="usuarios.xlsx"'
-    );
-
-    // Escribir directamente al stream de respuesta
-    await workbook.xlsx.write(res);
-    res.end();
-
-  } catch (error) {
-    console.error('❌ Error generando Excel:', error);
-    res.status(500).send('Error al generar el archivo Excel');
-  }
-});
 
 module.exports = router;

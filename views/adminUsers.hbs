@@ -1,15 +1,25 @@
+<div class="container">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile">Perfil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Admin Usuarios</li>
+    </ol>
+  </nav>
+</div>
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
-
+  <div class="btn-plus-User">
+    <button type="button" class="btn btn-create">Crear Usuario</button>
+  </div>
   <!-- Scroll vertical y horizontal con Bootstrap -->
   <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
     <div class="container-main">
-      <form action="/adminUsers" method="POST" class="form-inline">
+      <form action="/adminUsers" method="POST" class="">
         <select class="form-select col-md-2" name="filter" id="filter-option">
           <option value="null">Opción a filtrar</option>
           <option value="identification">Identificación</option>
           <option value="name">Nombre</option>
-          <option value="role">Role</option>
+          <option value="role">Rol</option>
           <option value="status">Estado</option>
         </select>
         <input type="text-capitalize" name="search" class="col-md-6" id="search" placeholder="Búsqueda">
@@ -27,8 +37,8 @@
           <th class="bg-th">Correo</th>
           <th class="bg-th">Feche Creación</th>
           <th class="bg-th">Estado</th>
-          <th class="bg-th">Editar</th>
-          <th class="bg-th">Eliminar</th>
+          <th class="bg-th">Acción</th>
+          <th class="bg-th">Acción</th>
         </tr>
       </thead>
       <tbody>
@@ -66,7 +76,8 @@
     <span class="close">&times;</span>
     <h3>Editar Usuario</h3>
 
-    <form id="editForm">
+    <form method="post" id="editForm" action="/adminUsers">
+    {{!-- <form method="post" id="editForm" action="/edit-user"> --}}
       <label>Identificación</label>
       <input type="text" id="editId" name="identification" readonly>
 
@@ -87,3 +98,30 @@
   </div>
 </div>
 
+<!-- 🔹 Modal -->
+{{!-- <div id="createModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Editar Usuario</h3>
+
+    <form method="post" id="editForm" action="/edit-user">
+      <label>Identificación</label>
+      <input type="text" id="editId" name="identification" readonly>
+
+      <label>Nombre</label>
+      <input type="text" id="editName" name="name" required>
+
+      <label>Role</label>
+      <input type="text" id="editRole" name="role" required>
+
+      <label>Correo</label>
+      <input type="email" id="editEmail" name="email" required>
+
+      <label>Estado</label>
+      <input type="text" id="editStatus" name="status" required>
+
+      <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    </form>
+  </div>
+</div>
+ --}}

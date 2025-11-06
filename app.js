@@ -90,6 +90,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require('./routes/indexRoutes'));
+app.use(require('./routes/servicesRoutes'));
+app.use(require('./routes/usersRoutes'));
 app.use(require('./routes/reportRoutes'));
 app.use(require('./routes/authentication'));
 
@@ -130,6 +132,13 @@ app.post('/uploads', upload.single('image'), async (req, res) => {
     console.error('Error al subir a Cloudinary:', err);
     return res.status(500).json({ success: false, error: 'Upload failed' });
   }
+});
+
+app.use((req, res, next) => {
+  res.status(404);
+
+  // Si usas Handlebars:
+  res.render('404', { title: 'Página no encontrada' });
 });
 
 app.listen(port, '0.0.0.0', () => {

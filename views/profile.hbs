@@ -4,18 +4,20 @@
             <div class="card">
                 <div class="card-body">
                     <h3>Welcome {{user.name}}</h3>
-                    <section >
+                    <section>
                         <div>identificacion: {{user.identification}}</div>
                         <div>Correo: {{user.email}}</div>
                         <div>Role: {{user.role}}</div>
                         <div>Creación: {{formatDate user.createdAt}}</div>
                         <div>Modificación: {{formatDate user.modifiedAt}}</div>
                     </section>
+                    {{#if (eq user.role "ADMIN")}}
                     <section class="">
-                        <button type="button" class="btn btn-secondary"><a href="/adminServices">Servicios Escalera</a></button>
                         <button type="button" class="btn btn-secondary"><a href="/adminUsers">Admin Usuarios</a></button>
+                        <button type="button" class="btn btn-secondary"><a href="/adminServices">Servicios Escalera</a></button>
                         <button type="button" class="btn btn-secondary"><a href="/adminReport">Admin Reportes</a></button>
                     </section>
+                    {{/if}}
                 </div>
             </div>
         </div>

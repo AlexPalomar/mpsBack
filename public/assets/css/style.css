@@ -65,3 +65,25 @@ bg-success{background-color:#198754!important}
   font-size: 22px;
   cursor: pointer;
 }
+
+.btn-plus-User{
+  
+  margin: 0px 15px 10px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.btn-plus-User > .btn{
+  color: #fff;
+  background: rgba(0, 0, 0, .8) !important;
+}
+
+@media (min-width: 750px) {
+  .chart{
+    display: block;
+    box-sizing: border-box;
+    height: 682.8px;
+    width: 682.8px;
+  }
+}

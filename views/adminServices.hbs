@@ -1,3 +1,11 @@
+<div class="container">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile">Perfil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Admin Servicios</li>
+    </ol>
+  </nav>
+</div>
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
 
@@ -7,6 +15,7 @@
       <form action="/adminServices" method="POST" class="form-inline">
         <select class="form-select col-md-2" name="filter" id="filter-option">
           <option value="null">Opción a filtrar</option>
+          <option value="idService">ID Servicio</option>
           <option value="status">Estado</option>
           <option value="tecnico">Técnico</option>
           <option value="driver">Conductor</option>
@@ -67,7 +76,7 @@
           <td>{{startedAt}}</td>
           <td>{{finishedAt}}</td>
           <td>
-            {{#if (eq status "Completado")}}
+            {{#if (eq status "COMPLETADO")}}
               <span class="btn btn-success">{{status}}</span>
             {{else}}
               <span class="btn btn-danger text-ligth">{{status}}</span>
@@ -79,4 +88,3 @@
     </table>
   </div>
 </div>
-{{!-- <script src="assets/js/adminTable.js"></script> --}}
