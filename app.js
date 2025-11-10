@@ -91,11 +91,11 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use(require('./routes/authentication'));
 app.use(require('./routes/indexRoutes'));
 app.use(require('./routes/servicesRoutes'));
 app.use(require('./routes/usersRoutes'));
 app.use(require('./routes/reportRoutes'));
-app.use(require('./routes/authentication'));
 app.use(require('./routes/messagingFCM'));
 
 
