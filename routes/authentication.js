@@ -49,22 +49,26 @@ router.post('/signin', isNotLoggedIn, (req,res, next) => {
   });
   
   router.post('/api/signin', (req, res, next) => {
-    passport.authenticate('local.signin', (err, user, info) => {
-      if (err) return next(err);
-      if (!user) return res.status(401).json({ message: 'Credenciales incorrectas' });
-
-      // Iniciar sesión manualmente
-      req.logIn(user, (err) => {
+    try{
+      passport.authenticate('remote.signin', (err, user, info) => {
         if (err) return next(err);
-        // console.log('Usuario autenticado:', user);   
-        // console.log('ID:', user.id);                 
+        if (!user) return res.status(401).json({ message: info?.message || 'Credenciales incorrectas' });
 
-        return res.status(200).json({
-          message: 'Inicio de sesión exitoso',
-          userId: user.id
+        // Iniciar sesión manualmente
+        req.logIn(user, (err) => {
+          if (err) return next(err);
+          // console.log('Usuario autenticado:', user);   
+          // console.log('ID:', user.id);                 
+
+          return res.status(200).json({
+            message: 'Inicio de sesión exitoso',
+            userId: user.id
+          });
         });
-      });
-    })(req, res, next);
+      })(req, res, next);
+    }catch(e){
+      return res.status(500).json({ message: e.err });
+    }
   });
 
 
