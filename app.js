@@ -137,12 +137,12 @@ app.post('/uploads', upload.single('image'), async (req, res) => {
   }
 });
 
-// app.use((req, res, next) => {
-//   res.status(404);
+app.use((req, res, next) => {
+  res.status(404);
 
-//   // Si usas Handlebars:
-//   res.render('404', { title: 'Página no encontrada' });
-// });
+  // Si usas Handlebars:
+  res.render('404', { title: 'Página no encontrada' });
+});
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`✅ Servidor corriendo en http://0.0.0.0:${port}`);
