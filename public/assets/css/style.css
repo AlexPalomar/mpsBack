@@ -66,6 +66,34 @@ bg-success{background-color:#198754!important}
   cursor: pointer;
 }
 
+/* Stilos Modal adminAlert */
+#modal-alert {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.btn-close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+/* fin Modal adminAlert */
+
 .btn-plus-User{
   
   margin: 0px 15px 10px 0px;

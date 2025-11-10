@@ -99,14 +99,15 @@ router.post('/edit-user', isLoggedIn, async (req, res) =>{
   try {
     const {identification, ...data} = req.body;
 
-    const snapshot = await db.collection('user').where('identification', '==', identification).get();
-    // const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    // await db.collection('user').doc(user.id).update(data);
-    console.log(req.body);
-    console.log(snapshot.doc);
+    const snapshot = await db.collection('user').where('identification', '==', parseInt(identification)).get();
+    const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    await db.collection('user').doc(user[0].id).update(data);
+  
+    // req.flash('success', 'Usuario modificado correctamente');
     // res.json({ Result: 'OK' });
   } catch (err) {
-    console.error(err);
+    console.error('Error: ', err);
+    // req.flash('message', 'A ocurrido un problema');
     // res.json({ Result: 'ERROR', Message: err.message });
   }
   

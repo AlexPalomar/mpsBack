@@ -85,6 +85,8 @@ app.use(passport.session());
 // Globlas Variables
 app.use((req, res, next) => {
   res.locals.user = req.user || null; // esto hace que {{user}} esté disponible en TODAS las vistas
+  app.locals.success = req.flash('success');
+  app.locals.message = req.flash('message');
   next();
 });
 
@@ -94,6 +96,7 @@ app.use(require('./routes/servicesRoutes'));
 app.use(require('./routes/usersRoutes'));
 app.use(require('./routes/reportRoutes'));
 app.use(require('./routes/authentication'));
+app.use(require('./routes/messagingFCM'));
 
 
 // // Ruta para subir imagen

@@ -61,7 +61,7 @@
             <button type="button" class="btn btn-warning btn-edit"><img src="/assets/images/pen-to-square-solid-white.svg" style="width: 24px; color: white" alt=""></button>
           </td>
           <td>
-            <button type="button" class="btn btn-danger"><img src="/assets/images/trash-solid-white.svg" style="width: 24px; color: white" alt=""></button>
+            <button id="btn-delete" type="button" class="btn btn-danger"><img src="/assets/images/trash-solid-white.svg" style="width: 24px; color: white" alt=""></button>
           </td>
         </tr>
         {{/each}}
@@ -76,10 +76,10 @@
     <span class="close">&times;</span>
     <h3>Editar Usuario</h3>
 
-    <form method="post" id="editForm" action="/adminUsers">
-    {{!-- <form method="post" id="editForm" action="/edit-user"> --}}
+    {{!-- <form method="post" id="editForm" action="/adminUsers"> --}}
+    <form method="post" id="editForm" action="/edit-user">
       <label>Identificación</label>
-      <input type="text" id="editId" name="identification" readonly>
+      <input type="number" id="editId" name="identification" readonly>
 
       <label>Nombre</label>
       <input type="text" id="editName" name="name" required>

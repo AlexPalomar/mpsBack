@@ -34,17 +34,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modal) modal.style.display = 'none';
   });
 
-  // Evento guardar
-  // editForm.addEventListener('submit', (e) => {
-  //   e.preventDefault();
-  //   alert('Datos guardados:\n' + 
-  //     document.getElementById('editId').value + '\n' +
-  //     document.getElementById('editName').value + '\n' + 
-  //     document.getElementById('editRole').value + '\n' +
-  //     document.getElementById('editEmail').value) + '\n' +
-  //     document.getElementById('editStatus').value;
-  //   modal.style.display = 'none';
+
+  // const closeBtnAlert = document.querySelector('.btn-close');
+  // const modalAlert = document.getElementById('modal-alert');
+  // const btnDelete = document.getElementById('btn-delete');
+
+  // // Add listener for edit buttons (no need to re-add delete listener inside)
+  // document.querySelectorAll('.btn-edit').forEach(button => {
+  //   button.addEventListener('click', (e) => {
+  //     // You can open the modal here directly, if that's intended:
+  //     // modalAlert.style.display = 'block';
+      
+  //     btnDelete.onclick = () => {
+  //       modalAlert.style.display = 'block';
+  //     };
+  //   });
   // });
 
-  
+  // closeBtnAlert.addEventListener('click', () => {
+  //   modalAlert.style.display = 'none';
+  // });
+
+
 });
