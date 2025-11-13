@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { engine } = require('express-handlebars');
 const cors = require('cors');
+const morgan = require('morgan');
 const path = require('path');
 const dotenv = require('dotenv');
 const moment = require('moment');
@@ -78,6 +79,7 @@ app.use(session({
 }));
 
 // Inicializar Passport
+app.use(morgan('dev'));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
