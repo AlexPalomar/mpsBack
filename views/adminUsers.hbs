@@ -8,8 +8,9 @@
 </div>
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
+  {{> message}}
   <div class="btn-plus-User">
-    <button type="button" class="btn btn-create">Crear Usuario</button>
+    <button type="button" class="btn btn-create" id="btn-create">Crear Usuario</button>
   </div>
   <!-- Scroll vertical y horizontal con Bootstrap -->
   <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
@@ -33,12 +34,13 @@
           <th class="bg-th">#</th>
           <th class="bg-th">Identificación</th>
           <th class="bg-th">Nombre</th>
-          <th class="bg-th">Role</th>
+          <th class="bg-th">Rol</th>
           <th class="bg-th">Correo</th>
-          <th class="bg-th">Feche Creación</th>
+          <th class="bg-th">Fecha Creación</th>
+          <th class="bg-th">Ultima Modificación</th>
           <th class="bg-th">Estado</th>
           <th class="bg-th">Acción</th>
-          <th class="bg-th">Acción</th>
+          {{!-- <th class="bg-th">Acción</th> --}}
         </tr>
       </thead>
       <tbody>
@@ -50,6 +52,7 @@
           <td >{{role}}</td>
           <td >{{email}}</td>
           <td>{{formatDate createdAt}}</td>
+          <td>{{formatDate modifiedAt}}</td>
           <td>
             {{#if (eq status "ACTIVO")}}
               <span class="btn btn-success">{{status}}</span>
@@ -60,9 +63,9 @@
           <td>
             <button type="button" class="btn btn-warning btn-edit"><img src="/assets/images/pen-to-square-solid-white.svg" style="width: 24px; color: white" alt=""></button>
           </td>
-          <td>
+          {{!-- <td>
             <button id="btn-delete" type="button" class="btn btn-danger"><img src="/assets/images/trash-solid-white.svg" style="width: 24px; color: white" alt=""></button>
-          </td>
+          </td> --}}
         </tr>
         {{/each}}
       </tbody>
@@ -77,14 +80,14 @@
     <h3>Editar Usuario</h3>
 
     {{!-- <form method="post" id="editForm" action="/adminUsers"> --}}
-    <form method="post" id="editForm" action="/edit-user">
+    <form method="post" id="editForm" action="/edit_user">
       <label>Identificación</label>
       <input type="number" id="editId" name="identification" readonly>
 
       <label>Nombre</label>
       <input type="text" id="editName" name="name" required>
 
-      <label>Role</label>
+      <label>Rol</label>
       <input type="text" id="editRole" name="role" required>
 
       <label>Correo</label>
@@ -99,29 +102,33 @@
 </div>
 
 <!-- 🔹 Modal -->
-{{!-- <div id="createModal" class="modal">
+<div id="createModal" class="modal">
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Editar Usuario</h3>
+    <span class="close" id="close">&times;</span>
+    <h3>Nuevo Usuario</h3>
 
-    <form method="post" id="editForm" action="/edit-user">
+    <form method="post" id="createForm" action="/create_user">
       <label>Identificación</label>
-      <input type="text" id="editId" name="identification" readonly>
+      <input type="number" id="createId" name="identification" required>
 
       <label>Nombre</label>
-      <input type="text" id="editName" name="name" required>
+      <input type="text" id="createName" name="name" required>
 
-      <label>Role</label>
-      <input type="text" id="editRole" name="role" required>
+      <label>Rol</label>
+      <input type="text" id="createRole" name="role" required>
 
       <label>Correo</label>
-      <input type="email" id="editEmail" name="email" required>
+      <input type="email" id="createEmail" name="email" required>
 
-      <label>Estado</label>
-      <input type="text" id="editStatus" name="status" required>
+      <label>Contraseña</label>
+      <input type="password" id="createPassword" name="password" required>
+
+      <label>Confirmar Contraseña</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
+      <button class="btn btn-secondary" id="viewPass" type="button">Mostrar Contraseña</button>
 
       <button type="submit" class="btn btn-success mt-2">Guardar</button>
     </form>
   </div>
 </div>
- --}}
+

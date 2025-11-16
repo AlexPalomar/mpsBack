@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const nombre = cells[2].innerText;
       const role = cells[3].innerText;
       const correo = cells[4].innerText;
-      const estado = cells[6].innerText;
+      const estado = cells[7].innerText;
 
       // Llenar el formulario
       document.getElementById('editId').value = identificacion;
@@ -33,27 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('click', (e) => {
     if (e.target === modal) modal.style.display = 'none';
   });
-
-
-  // const closeBtnAlert = document.querySelector('.btn-close');
-  // const modalAlert = document.getElementById('modal-alert');
-  // const btnDelete = document.getElementById('btn-delete');
-
-  // // Add listener for edit buttons (no need to re-add delete listener inside)
-  // document.querySelectorAll('.btn-edit').forEach(button => {
-  //   button.addEventListener('click', (e) => {
-  //     // You can open the modal here directly, if that's intended:
-  //     // modalAlert.style.display = 'block';
-      
-  //     btnDelete.onclick = () => {
-  //       modalAlert.style.display = 'block';
-  //     };
-  //   });
-  // });
-
-  // closeBtnAlert.addEventListener('click', () => {
-  //   modalAlert.style.display = 'none';
-  // });
-
 
 });
