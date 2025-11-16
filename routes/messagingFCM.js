@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { admin, db } = require('../lib/firebase');
 
-router.post('/api/send-notification', async (req, res) => {
+router.post('/send-notification', async (req, res) => {
   try {
     const { userId, title, body } = req.body;
 

@@ -94,11 +94,11 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require('./routes/authentication'));
+app.use('/api', require('./routes/messagingFCM'));
 app.use(require('./routes/indexRoutes'));
 app.use(require('./routes/servicesRoutes'));
 app.use(require('./routes/usersRoutes'));
 app.use(require('./routes/reportRoutes'));
-app.use(require('./routes/messagingFCM'));
 
 
 // // Ruta para subir imagen
