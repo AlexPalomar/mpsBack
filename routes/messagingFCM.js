@@ -10,12 +10,12 @@ router.post('/api/send-notification', async (req, res) => {
     // Obtener token FCM del usuario
     const userDoc = await db.collection('user').doc(userId).get();
     if (!userDoc.exists) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'Usuario no encontrado'});
     }
 
     const fcmToken = userDoc.data().fcmToken;
     if (!fcmToken) {
-      return res.status(400).json({ message: 'Usuario no tiene token FCM' });
+      return res.status(400).json({ message: 'Usuario no tiene token FCM'});
     }
 
     // Crear mensaje
