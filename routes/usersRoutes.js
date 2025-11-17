@@ -13,7 +13,7 @@ router.get('/adminUsers', isLoggedIn, async (req, res) => {
     const snapshot = await db.collection('user').get();
     const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    res.render('adminUsers', {              
+    res.render('adminUsers', {
       title: 'Administración de Usuarios',
       user: user,
     });
@@ -32,7 +32,7 @@ router.post('/adminUsers', isLoggedIn, async (req, res) => {
       const snapshot = await db.collection('user').get();
       const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      res.render('adminUsers', {              
+      res.render('adminUsers', {
         title: 'Administración de Usuarios',
          user: user,
       });
@@ -63,7 +63,7 @@ router.post('/adminUsers', isLoggedIn, async (req, res) => {
           break;
         }
 
-        res.render('adminUsers', {              
+        res.render('adminUsers', {
           title: 'Administración de Usuarios',
            user: user,
         });
@@ -72,7 +72,7 @@ router.post('/adminUsers', isLoggedIn, async (req, res) => {
         const snapshot = await db.collection('user').where(filter.filter, '==', convertAtNumber).get();
         const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        res.render('adminUsers', {              
+        res.render('adminUsers', {
           title: 'Administración de Usuarios',
            user: user,
         });
@@ -88,64 +88,77 @@ router.post('/adminUsers', isLoggedIn, async (req, res) => {
 
 router.post('/create_User', isLoggedIn, async (req, res) => {
   try {
-    
-    if(req.body.password == req.body.confirmPassword){
-      const snapshot = await db.collection('user').where('email', '==', req.body.email.toLowerCase()).get();
-      const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      if(user[0].email == req.body.email){
-        const snapshot = await db.collection('user').get();
-        const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.render('adminUsers', {              
-          title: 'Administración de Usuarios',
-          user: users,
-          message: 'El correo '+ req.body.email + ' ya esta registrado.'
-        });
-      }else{
-      
-        const passEncripted = await helper.encryptPassword(req.body.password);
-        
-        const newUser = {
-          identification: parseInt(req.body.identification),
-          name: req.body.name.toUpperCase(),
-          role: req.body.role.toUpperCase(),
-          email: req.body.email.toLowerCase(),
-          password: passEncripted,
-          status: 'ACTIVO',
-          createdAt:  timestampFormateado,
-          modifiedAt: timestampFormateado
-        };
-        console.log(newUser);
-        
-        // const docRef = await db.collection('user').add(newUser);
-        const snapshot = await db.collection('user').get();
-        const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.render('adminUsers', {              
-            title: 'Administración de Usuarios',
-            user: users,
-            success: 'Usuario creado correctamente.'
-          });
-      }
-    }else{
+
+    if (req.body.password !== req.body.confirmPassword) {
       const snapshot = await db.collection('user').get();
       const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      res.render('adminUsers', {              
+      return res.render('adminUsers', {
         title: 'Administración de Usuarios',
         user: users,
-        message: 'Las contraseña no coinciden.'
+        message: 'Las contraseñas no coinciden.'
       });
     }
+
+    // Buscar email en Firestore
+    const snapshot = await db.collection('user')
+      .where('email', '==', req.body.email.toLowerCase())
+      .get();
+
+    const usersFound = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    // Si no existe → crearlo
+    if (usersFound.length === 0) {
+
+      const passEncripted = await helper.encryptPassword(req.body.password);
+
+      const newUser = {
+        identification: parseInt(req.body.identification),
+        name: req.body.name.toUpperCase(),
+        role: req.body.role.toUpperCase(),
+        email: req.body.email.toLowerCase(),
+        password: passEncripted,
+        status: 'ACTIVO',
+        createdAt: timestampFormateado,
+        modifiedAt: timestampFormateado
+      };
+
+      await db.collection('user').add(newUser);
+
+      const snapshotAll = await db.collection('user').get();
+      const users = snapshotAll.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      return res.render('adminUsers', {
+        title: 'Administración de Usuarios',
+        user: users,
+        success: 'Usuario creado correctamente.'
+      });
+    }
+
+    // Si existe → mostrar error
+    const emailFound = usersFound[0].email;
+
+    const snapshotAll = await db.collection('user').get();
+    const users = snapshotAll.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    return res.render('adminUsers', {
+      title: 'Administración de Usuarios',
+      user: users,
+      message: `El correo ${emailFound} ya está registrado.`
+    });
 
   } catch (err) {
     console.error(err);
     const snapshot = await db.collection('user').get();
     const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      res.render('adminUsers', {              
-        title: 'Administración de Usuarios',
-        user: users,
-          message: err.message
-      });
+
+    return res.render('adminUsers', {
+      title: 'Administración de Usuarios',
+      user: users,
+      message: err.message
+    });
   }
 });
+
 
 router.post('/edit_user', isLoggedIn, async (req, res) =>{
   try {
@@ -153,7 +166,7 @@ router.post('/edit_user', isLoggedIn, async (req, res) =>{
 
     const snapshot = await db.collection('user').where('identification', '==', parseInt(identification)).get();
     const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
+
     user[0].identification = parseInt(req.body.identification),
     user[0].name = req.body.name.toUpperCase(),
     user[0].role = req.body.role.toUpperCase(),
@@ -165,10 +178,10 @@ router.post('/edit_user', isLoggedIn, async (req, res) =>{
   } catch (err) {
     console.error('Error: ', err);
   }
-  
+
   const snapshot = await db.collection('user').get();
   const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  res.render('adminUsers', {              
+  res.render('adminUsers', {
     title: 'Administración de Usuarios',
     user: users,
     success: 'Usuario modificado correctamente.'
