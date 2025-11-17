@@ -90,7 +90,7 @@ router.post('/create_User', isLoggedIn, async (req, res) => {
   try {
     
     if(req.body.password == req.body.confirmPassword){
-      const snapshot = await db.collection('user').where('email', '==', req.body.email).get();
+      const snapshot = await db.collection('user').where('email', '==', req.body.email.toLowerCase()).get();
       const user = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       if(user[0].email == req.body.email){
         const snapshot = await db.collection('user').get();
@@ -108,7 +108,7 @@ router.post('/create_User', isLoggedIn, async (req, res) => {
           identification: parseInt(req.body.identification),
           name: req.body.name.toUpperCase(),
           role: req.body.role.toUpperCase(),
-          email: req.body.email.toUpperCase(),
+          email: req.body.email.toLowerCase(),
           password: passEncripted,
           status: 'ACTIVO',
           createdAt:  timestampFormateado,
