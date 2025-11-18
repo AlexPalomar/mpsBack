@@ -72,13 +72,6 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
     const snapshot = await db.collection('user').get();
     const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    // Convertir timestamps a formato legible
-    users = users.map(u => ({
-      ...u,
-      createdAt: formatTimestamp(u.createdAt),
-      modifiedAt: formatTimestamp(u.modifiedAt),
-    }));
-
     //  Agregar datos
     worksheet.addRows(users);
 
@@ -137,15 +130,6 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
     const snapshot = await db.collection('escalera').get();
     const services = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    // Convertir timestamps a formato legible
-    services = services.map(s => ({
-      ...s,
-      startTimeout: formatTimestamp(s.startTimeout),
-      finishedAt: formatTimestamp(s.finishedAt),
-      createdAt: formatTimestamp(s.createdAt),
-      modifiedAt: formatTimestamp(s.modifiedAt),
-    }));
-
     // Agregar datos
     worksheet.addRows(services);
 
@@ -173,7 +157,7 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
     // console.log(200);
 
   } catch (error) {
-    console.error('❌ Error generando Excel:', error);
+    console.error('Error generando Excel:', error);
     res.status(500).send('Error al generar el archivo Excel');
   }
 });
