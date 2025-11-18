@@ -5,8 +5,9 @@ const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 const helper = require('../lib/helpers');
 const moment = require('moment');
 
-const now = moment();
-const timestampFormateado = now.format('YYYY-MM-DD HH:mm:ss');
+// const now = moment();
+// const timestampFormateado = now.format('YYYY-MM-DD HH:mm:ss');
+const timestamp = admin.firestore.Timestamp.fromDate(new Date());
 
 router.get('/adminUsers', isLoggedIn, async (req, res) => {
   try {
@@ -118,8 +119,8 @@ router.post('/create_User', isLoggedIn, async (req, res) => {
         email: req.body.email.toLowerCase(),
         password: passEncripted,
         status: 'ACTIVO',
-        createdAt: timestampFormateado,
-        modifiedAt: timestampFormateado
+        createdAt: timestamp,
+        modifiedAt: timestamp
       };
 
       await db.collection('user').add(newUser);
@@ -172,7 +173,7 @@ router.post('/edit_user', isLoggedIn, async (req, res) =>{
     user[0].role = req.body.role.toUpperCase(),
     user[0]. email = req.body.email.toLowerCase(),
     user[0].status = req.body.status.toUpperCase(),
-    user[0].modifiedAt = timestampFormateado
+    user[0].modifiedAt = timestamp
     await db.collection('user').doc(user[0].id).update(user[0]);
 
   } catch (err) {
