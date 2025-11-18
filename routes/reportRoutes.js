@@ -60,6 +60,8 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
     
     //  Definir las columnas
     worksheet.columns = [
+      { header: 'Fecha Creación', key: 'createdAt', width: 10 },
+      { header: 'Ultima Modificación', key: 'modifiedAt', width: 10 },
       { header: 'Cedula', key: 'identification', width: 10 },
       { header: 'Nombre', key: 'name', width: 30 },
       { header: 'Correo', key: 'email', width: 30 },
@@ -70,6 +72,13 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
     const snapshot = await db.collection('user').get();
     const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+    // Convertir timestamps a formato legible
+    users = users.map(u => ({
+      ...u,
+      createdAt: formatTimestamp(u.createdAt),
+      modifiedAt: formatTimestamp(u.modifiedAt),
+    }));
+
     //  Agregar datos
     worksheet.addRows(users);
 
@@ -79,7 +88,6 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
 
     // hace unico cada archivo que se genere con fecha y hora actual
     const nowFormatted = moment().format('DD/MM/YYYY, HH:mm');
-    console.log(nowFormatted);
 
     //  Enviar el archivo al cliente
     res.setHeader(
@@ -129,6 +137,15 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
     const snapshot = await db.collection('escalera').get();
     const services = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+    // Convertir timestamps a formato legible
+    services = services.map(s => ({
+      ...s,
+      startTimeout: formatTimestamp(s.startTimeout),
+      finishedAt: formatTimestamp(s.finishedAt),
+      createdAt: formatTimestamp(s.createdAt),
+      modifiedAt: formatTimestamp(s.modifiedAt),
+    }));
+
     // Agregar datos
     worksheet.addRows(services);
 
@@ -138,7 +155,6 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
 
     // hace unico cada archivo que se genere con fecha y hora actual
     const nowFormatted = moment().format('DD/MM/YYYY, HH:mm');
-    console.log(nowFormatted);
 
     // Enviar el archivo al cliente
     res.setHeader(
