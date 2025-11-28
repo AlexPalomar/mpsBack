@@ -8,20 +8,20 @@
 </div>
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
-
+  {{> message}}
   <!-- Scroll vertical y horizontal con Bootstrap -->
   <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
-    <div class="container-main">
-      <form action="/adminServices" method="POST" class="form-inline">
-        <select class="form-select col-md-2" name="filter" id="filter-option">
+    <div class="container">
+      <form action="/adminServices" method="POST" class="form-filter">
+        <select class="form-select" name="filter" id="filter-option">
           <option value="null">Opción a filtrar</option>
           <option value="idService">ID Servicio</option>
           <option value="status">Estado</option>
           <option value="tecnico">Técnico</option>
           <option value="driver">Conductor</option>
         </select>
-        <input type="text-capitalize" name="search" class="col-md-6" id="search" placeholder="Búsqueda">
-        <button class="btn btn-success col-md-4" type="submit">Consultar</button>
+        <input type="text-capitalize" name="search" class="" id="search" placeholder="Búsqueda">
+        <button class="" type="submit">Consultar</button>
       </form>
     </div>
     <table class="table table-bordered table-hover align-middle" id="adminTable">
@@ -35,27 +35,28 @@
           <th class="bg-th">Zona</th>
           <th class="bg-th">Escalera</th>
           <th class="bg-th">Conductor</th>
-          {{!-- <th>Inicio Espera</th> --}}
+          <th>Fecha Creación</th>
           <th class="bg-th">Ubicación</th>
           <th class="bg-th">Evidencia</th>
-          <th class="bg-th">Tiempo Espera</th>
-          <th class="bg-th">Tiempo Ejecución</th>
+          {{!-- <th class="bg-th">Tiempo Espera</th> --}}
+          {{!-- <th class="bg-th">Tiempo Ejecución</th> --}}
           <th class="bg-th">Inicio Ejecución</th>
-          <th class="bg-th">Finalizado Ejecución</th>
+          <th class="bg-th">Final Ejecución</th>
           <th class="bg-th">Estado</th>
+          <th class="bg-th">Acción</th>
         </tr>
       </thead>
       <tbody>
         {{#each data}}
         <tr>
           <td>{{@index}}</td>
-          <td><span class="badge badge-service bg-primary">{{idService}}</span></td>
+          <td><span class="badge badge-service bg-primary" id="deleteIdService">{{idService}}</span></td>
           <td>{{addres}}</td>
           <td class="text-uppercase">{{tecnico}}</td>
           <td>{{supportZone}}</td>
           <td>{{ladder}}</td>
           <td>{{driver}}</td>
-          {{!-- <td>{{startTimeout}}</td> --}}
+          <td>{{formatDate startTimeout}}</td>
           <td>
             {{location}}<br>
             <a href="https://www.google.com/maps?q={{location}}" target="_blank" class="btn btn-sm btn-outline-success mt-1">
@@ -71,20 +72,49 @@
               Sin evidencia
             {{/if}}
           </td>
-          <td>{{durationTimeout}}</td>
-          <td>{{executeTimeout}}</td>
+          {{!-- <td>{{durationTimeout}}</td> --}}
+          {{!-- <td>{{executeTimeout}}</td> --}}
           <td>{{startedAt}}</td>
           <td>{{finishedAt}}</td>
           <td>
-            {{#if (eq status "COMPLETADO")}}
-              <span class="btn btn-success">{{status}}</span>
-            {{else}}
+            {{#if (eq status "CANCELADO")}}
               <span class="btn btn-danger text-ligth">{{status}}</span>
+            {{else}}
+              {{#if (eq status "PENDIENTE")}}
+                <span class="btn" style="color: white; background: gray;">{{status}}</span>
+              {{else}}
+                  {{#if (eq status "EJECUCIÓN")}}
+                  <span class="btn" style="color: white; background: #9de229;">{{status}}</span>
+                  {{else}}
+                    <span class="btn btn-success">{{status}}</span>
+                  {{/if}}
+              {{/if}}
             {{/if}}
+          </td>
+          <td>
+            <button id="btn-delete" type="button" class="btn btn-danger">Eliminar</button>
           </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- 🔹 Modal -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Eliminar Servicio</h3>
+    <p></p>
+    <h5>Esta seguro que desea eliminar el servicio.</h5>
+    <form method="post"  action="/delete_service">
+      <input type="text" id="deleteId" name="idService" style="border: none;" readonly>
+      <p></p>
+        <button type="submit" class="btn btn-success mt-2 col-md-6">SI</button>
+      <div class="row mt-5">
+        <button class="btn btn-secondary col-md-6" id="noOption" type="button">NO</button>
+      </div>
+    </form>
   </div>
 </div>

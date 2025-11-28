@@ -127,16 +127,33 @@ router.put('/disable', isLoggedIn, async (req, res) => {
 });
 
 // Eliminar servicio
-// router.delete('/disable', isLoggedIn, async (req, res) => {
-//   try {
-//     const { id } = req.body;
-//     await db.collection('escalera').doc(id).delete();
-//     res.json({ Result: 'OK' });
-//   } catch (err) {
-//     console.error(err);
-//     res.json({ Result: 'ERROR', Message: err.message });
-//   }
-// });
+router.post('/delete_service', isLoggedIn, async (req, res) => {
+  try {
+    const { idService } = req.body;
+    if (!idService) {
+      console.error('idService es undefined o null');
+      res.redirect('/adminServices');
+      return;
+    }
+    const querySnapshot = await db.collection('escalera') .where('idService', '==', idService).get();
+    if (querySnapshot.empty) {
+      console.log('No existe el documento');
+      console.log( req.body);
+      req.flash('success', `No existe el registro`);
+      return;
+    }
+
+    const doc = querySnapshot.docs[0];
+    const result = await doc.ref.delete();
+    console.log(result);
+    req.flash('success', `Servicio ${idService} eliminado exitosamente.`);
+    return res.redirect('adminServices');
+  } catch (err) {
+    console.error(err);
+    req.flash('success', err);
+    return res.redirect('adminServices');
+  }
+});
 
 
 module.exports = router;

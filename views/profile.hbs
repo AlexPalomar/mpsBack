@@ -11,6 +11,7 @@
                         <div>Creación: {{formatDate user.createdAt}}</div>
                         <div>Modificación: {{formatDate user.modifiedAt}}</div>
                     </section>
+                    <p></p>
                     {{#if (eq user.role "ADMIN")}}
                     <section class="">
                         <button type="button" class="btn btn-secondary"><a href="/adminUsers">Admin Usuarios</a></button>

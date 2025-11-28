@@ -107,6 +107,25 @@ bg-success{background-color:#198754!important}
   background: rgba(0, 0, 0, .8) !important;
 }
 
+.form-filter > button{
+  width: 18% !important;
+  height: 40px !important;
+  background: #5cb85c;
+  color: white;
+  font-weight: 600;
+}
+
+.form-filter > input{
+  width: 60% !important;
+  height: 40px !important ;
+}
+
+.form-filter > select{
+  width: 20% !important;
+  height: 40px !important;
+}
+
+
 @media (min-width: 750px) {
   .chart{
     display: block;

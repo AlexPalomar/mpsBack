@@ -189,5 +189,34 @@ router.post('/edit_user', isLoggedIn, async (req, res) =>{
   });
 });
 
+// Eliminar usuario
+router.post('/delete_user', isLoggedIn, async (req, res) => {
+  try {
+    const { identification } = req.body;
+    if (!identification) {
+      console.error('identification es undefined o null');
+      res.redirect('/adminUsers');
+      return;
+    }
+    const querySnapshot = await db.collection('user').where('identification', '==', parseInt(identification)).get();
+    if (querySnapshot.empty) {
+      console.log('No existe el documento');
+      console.log( req.body);
+      req.flash('message', `No existe el registro`);
+      return;
+    }
+
+    const doc = querySnapshot.docs[0];
+    const result = await doc.ref.delete();
+    console.log(result);
+    req.flash('success', `Usuario ${identification} eliminado exitosamente.`);
+    return res.redirect('adminUsers');
+  } catch (err) {
+    console.error(err);
+    req.flash('message', err);
+    return res.redirect('adminUsers');
+  }
+});
+
 
 module.exports = router;

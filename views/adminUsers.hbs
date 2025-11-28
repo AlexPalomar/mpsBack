@@ -14,17 +14,17 @@
   </div>
   <!-- Scroll vertical y horizontal con Bootstrap -->
   <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
-    <div class="container-main">
-      <form action="/adminUsers" method="POST" class="">
-        <select class="form-select col-md-2" name="filter" id="filter-option">
+    <div class="container">
+      <form action="/adminUsers" method="POST" class="form-filter">
+        <select class="" name="filter" id="filter-option">
           <option value="null">Opción a filtrar</option>
           <option value="identification">Identificación</option>
           <option value="name">Nombre</option>
           <option value="role">Rol</option>
           <option value="status">Estado</option>
         </select>
-        <input type="text-capitalize" name="search" class="col-md-6" id="search" placeholder="Búsqueda">
-        <button class="btn btn-success col-md-4" type="submit">Consultar</button>
+        <input type="text-capitalize" name="search" id="search" placeholder="Búsqueda">
+        <button class="" type="submit">Consultar</button>
       </form>
     </div>
     <table class="table table-bordered table-hover align-middle" id="adminTable">
@@ -40,7 +40,7 @@
           <th class="bg-th">Ultima Modificación</th>
           <th class="bg-th">Estado</th>
           <th class="bg-th">Acción</th>
-          {{!-- <th class="bg-th">Acción</th> --}}
+          <th class="bg-th">Acción</th>
         </tr>
       </thead>
       <tbody>
@@ -63,41 +63,13 @@
           <td>
             <button type="button" class="btn btn-warning btn-edit"><img src="/assets/images/pen-to-square-solid-white.svg" style="width: 24px; color: white" alt=""></button>
           </td>
-          {{!-- <td>
-            <button id="btn-delete" type="button" class="btn btn-danger"><img src="/assets/images/trash-solid-white.svg" style="width: 24px; color: white" alt=""></button>
-          </td> --}}
+          <td>
+            <button id="btn-deleteUser" type="button" class="btn btn-danger">Eliminar</button>
+          </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
-  </div>
-</div>
-
-<!-- 🔹 Modal -->
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Editar Usuario</h3>
-
-    {{!-- <form method="post" id="editForm" action="/adminUsers"> --}}
-    <form method="post" id="editForm" action="/edit_user">
-      <label>Identificación</label>
-      <input type="number" id="editId" name="identification" readonly>
-
-      <label>Nombre</label>
-      <input type="text" id="editName" name="name" required>
-
-      <label>Rol</label>
-      <input type="text" id="editRole" name="role" required>
-
-      <label>Correo</label>
-      <input type="email" id="editEmail" name="email" required>
-
-      <label>Estado</label>
-      <input type="text" id="editStatus" name="status" required>
-
-      <button type="submit" class="btn btn-success mt-2">Guardar</button>
-    </form>
   </div>
 </div>
 
@@ -128,6 +100,56 @@
       <button class="btn btn-secondary" id="viewPass" type="button">Mostrar Contraseña</button>
 
       <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- 🔹 Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Editar Usuario</h3>
+
+    {{!-- <form method="post" id="editForm" action="/adminUsers"> --}}
+    <form method="post" id="editForm" action="/edit_user">
+      <label>Identificación</label>
+      <input type="number" id="editId" name="identification" readonly>
+
+      <label>Nombre</label>
+      <input type="text" id="editName" name="name" required>
+
+      <label>Rol</label>
+      <input type="text" id="editRole" name="role" required>
+
+      <label>Correo</label>
+      <input type="email" id="editEmail" name="email" required>
+
+      <label>Estado</label>
+      <input type="text" id="editStatus" name="status" required>
+
+      <button type="submit" class="btn btn-success mt-2">Guardar</button>
+    </form>
+  </div>
+</div>
+
+<!-- 🔹 Modal -->
+<div id="deleteUserModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Eliminar Usuario</h3>
+    <p></p>
+    <h5>Esta seguro que desea eliminar el usuario.</h5>
+    <p></p>
+    <form method="post"  action="/delete_user">
+      <input type="text" id="deleteUserId" name="identification" style="border: none;" readonly>
+      <div id="infoUser"></div>
+      <p></p>
+        <button type="submit" class="btn btn-success mt-2 col-md-6">SI</button>
+      <div class="row mt-5">
+        <button class="btn btn-secondary col-md-6" id="noOptionUser" type="button">NO</button>
+      </div>
     </form>
   </div>
 </div>

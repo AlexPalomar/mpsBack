@@ -4,6 +4,7 @@ const ExcelJS = require('exceljs');
 const { admin, db } = require('../lib/firebase');
 const { isLoggedIn } = require('../lib/auth');
 const moment = require('moment');
+const helpers = require('../lib/helpers');
 
 router.get('/adminReport', isLoggedIn, async (req, res)=> {
 
@@ -70,7 +71,16 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
     ];
 
     const snapshot = await db.collection('user').get();
-    const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const users = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: helpers.formatedDateToMoment(data.createdAt),
+        modifiedAt: helpers.formatedDateToMoment(data.modifiedAt)
+      };
+    });
 
     //  Agregar datos
     worksheet.addRows(users);
@@ -128,7 +138,16 @@ router.get('/export-services', isLoggedIn, async (req, res) => {
     ];
 
     const snapshot = await db.collection('escalera').get();
-    const services = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // const services = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const services = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        startTimeout: helpers.formatedDateToMoment(data.startTimeout),
+        finishedAt: helpers.formatedDateToMoment(data.finishedAt),
+      };
+    });
 
     // Agregar datos
     worksheet.addRows(services);
