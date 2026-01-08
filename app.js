@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const multer = require('multer');
 const { engine } = require('express-handlebars');
 const cors = require('cors');
@@ -8,18 +9,23 @@ const dotenv = require('dotenv');
 const moment = require('moment');
 const { v2: cloudinary } = require('cloudinary');
 const fs = require('fs');
-const { admin, db } = require('./lib/firebase');
 const FirestoreStore = require('./lib/firebaseStore');
 const flash = require('connect-flash');
 const passport = require('passport');
 const session = require('express-session');
 require('./lib/passport');
+const SocketServer = require('./socketConnect');
 
 
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 80;
+
+// Inicializar Socket.IO
+const socketServer = new SocketServer(server);
+socketServer;
 
 // Middleware
 app.use(cors());
@@ -146,7 +152,7 @@ app.use((req, res, next) => {
   res.render('404', { title: 'Página no encontrada' });
 });
 
-app.listen(port, '0.0.0.0', () => {
+server.listen(port, () => {
   console.log(`✅ Servidor corriendo en http://0.0.0.0:${port}`);
 });
 
