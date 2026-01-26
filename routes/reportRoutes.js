@@ -194,7 +194,7 @@ router.get('/export-users', isLoggedIn, async (req, res) => {
     // console.log(200);
 
   } catch (error) {
-    console.error('❌ Error generando Excel:', error);
+    console.error('Error generando Excel:', error);
     res.status(500).send('Error al generar el archivo Excel');
   }
 });
