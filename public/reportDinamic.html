@@ -425,9 +425,9 @@
         });
     }
 
-    createPivot("#pivotUsers", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
-    createPivot("#pivotServices", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
-    createPivot("#pivotCierreCiclo", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
+    createPivot("#pivotUsers", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
+    createPivot("#pivotServices", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
+    createPivot("#pivotCierreCiclo", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
 
     $("#exportUsers").click(function () {
       $("#pivotUsers table").tableExport({ type: 'xls', fileName: 'UsuariosPivot' });
@@ -444,9 +444,9 @@
   </script>
 
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/headroom.min.js"></script>
-	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/jQuery.headroom.min.js"></script>
-	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/template.js"></script>
-	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/main.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/js/headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/js/jQuery.headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/js/template.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/js/main.js"></script>
 </body>
 </html>
