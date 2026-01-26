@@ -42,10 +42,10 @@
         <div class="navbar-header">
           <!-- Button for smallest screens -->
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-          <a class="navbar-brand" style="margin: 0px 0 0 0;" href="/"><img src="http://localhost/assets/images/ic_launcher.png" alt="Manage ProService" style="width: 60px;"></a>
+          <a class="navbar-brand" style="margin: 0px 0 0 0;" href="/"><img src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/images/ic_launcher.png" alt="Manage ProService" style="width: 60px;"></a>
         </div>
         <div class="navbar-header">
-          <a class="navbar-brand" href="http://localhost/">&nbsp;Manage ProService</a>
+          <a class="navbar-brand" href="/">&nbsp;Manage ProService</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav pull-right">
@@ -309,7 +309,7 @@
     const cfg = document.getElementById('chart-line2');
 
     // Los datos vienen del servidor
-    fetch("http://localhost/adminReportData")
+    fetch("https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/adminReportData")
       .then(r => {
         if (!r.ok) throw new Error("No autorizado o error API");
         return r.json();
@@ -425,9 +425,9 @@
         });
     }
 
-    createPivot("#pivotUsers", "http://localhost/api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
-    createPivot("#pivotServices", "http://localhost/api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
-    createPivot("#pivotCierreCiclo", "http://localhost/api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
+    createPivot("#pivotUsers", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
+    createPivot("#pivotServices", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
+    createPivot("#pivotCierreCiclo", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
 
     $("#exportUsers").click(function () {
       $("#pivotUsers table").tableExport({ type: 'xls', fileName: 'UsuariosPivot' });
@@ -443,10 +443,10 @@
     
   </script>
 
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="http://localhost/assets/js/headroom.min.js"></script>
-	<script src="http://localhost/assets/js/jQuery.headroom.min.js"></script>
-	<script src="http://localhost/assets/js/template.js"></script>
-	<script src="http://localhost/assets/js/main.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/jQuery.headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/template.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com//js/main.js"></script>
 </body>
 </html>
