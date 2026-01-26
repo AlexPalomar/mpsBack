@@ -44,6 +44,84 @@ router.get('/cierreCiclo', isLoggedIn, async(req, res) => {
 
 router.post('/cierreCiclo', isLoggedIn, async (req, res) => {
   try {
+    const { filter, search } = req.query;
+
+      // OBTENER CIERRE DE CICLO
+    let snapshotCierreCiclo;
+
+    if (!filter || filter === 'null' || !search) {
+      // Sin filtros
+      snapshotCierreCiclo = await db.collection('cierreCiclo').get();
+    } else {
+
+      // Filtros exactos (Firestore where)
+      if (['status', 'tecnico', 'superviser', 'idCCiclo'].includes(filter)) {
+        snapshotCierreCiclo = await db
+          .collection('cierreCiclo')
+          .where(filter, '==', search.toUpperCase())
+          .get();
+      } else {
+        // Filtros por texto (includes)
+        const all = await db.collection('cierreCiclo').get();
+        snapshotCierreCiclo = {
+          docs: all.docs.filter(doc =>
+            (doc.data()[filter] || '')
+              .toUpperCase()
+              .includes(search.toUpperCase())
+          )
+        };
+      }
+    }
+
+    const cierreCiclo = snapshotCierreCiclo.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+      // CAUSAS DE CIERRE
+    const snapshotCausaCierreCiclo = await db
+      .collection('causaCierreCiclo')
+      .get();
+
+    const causa = snapshotCausaCierreCiclo.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+      // USUARIOS (SUPERVISOR / TÉCNICO)
+    const snapshotUsers = await db
+      .collection('user')
+      .where('role', 'in', ['ADMIN', 'TECNICO'])
+      .get();
+
+    const users = snapshotUsers.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const supervisor = users.filter(u => u.role === 'ADMIN');
+    const tecnicos   = users.filter(u => u.role === 'TECNICO');
+    console.log(cierreCiclo[0]);
+      //RENDER
+    res.render('cierreCiclo', {
+      title: 'Cierre de Ciclo',
+      supervisor,
+      tecnico: tecnicos,
+      data: cierreCiclo,
+      causa,
+      filter,
+      search
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al obtener los registros');
+  }
+});
+
+
+router.post('/create_cierreCiclo', isLoggedIn, async (req, res) => {
+  try {
 
       if (req.body) {
         const pyc = Number(req.body.calificacionPyC);

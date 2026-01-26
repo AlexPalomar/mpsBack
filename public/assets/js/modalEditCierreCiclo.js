@@ -6,11 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const contentInfoCc = document.querySelector('#infoUser');
   const editForm = document.getElementById('editCierreCicloForm');
 
-  if (closeBtnCc && editCierreCicloModal && contentInfoCc && editForm && noOptionCc && editCierreCicloModal) {
+  
     closeBtnCc.addEventListener('click', () => {
       editCierreCicloModal.style.display = 'none';
     });
-  
 
     // Asignar evento a todos los botones Editar
     document.querySelectorAll('#btnCierreCicloDetail').forEach(button => {
@@ -127,5 +126,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => {
       if (e.target === editCierreCicloModal) editCierreCicloModal.style.display = 'none';
     });
-  }
+  
 });
