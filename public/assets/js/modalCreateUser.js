@@ -3,13 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtnAlert = document.querySelector('#close');
   const modalAlert = document.getElementById('createModal');
 
-  btnCreate.addEventListener('click', (e) => {
-    modalAlert.style.display = 'block';
-  });
+  if(btnCreate){
+    btnCreate.addEventListener('click', (e) => {
+      modalAlert.style.display = 'block';
+    });
+  }
 
-  closeBtnAlert.addEventListener('click', () => {
-    modalAlert.style.display = 'none';
-  });
+  if(closeBtnAlert){
+    closeBtnAlert.addEventListener('click', () => {
+      modalAlert.style.display = 'none';
+    });
+  }
   window.addEventListener('click', (e) => {
     if (e.target === modalAlert) modalAlert.style.display = 'none';
   });
@@ -18,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   var inputPassword = document.getElementById("createPassword");
   var viewPassConfirm = document.getElementById('viewPassConfirm');
   var confirmPassword = document.getElementById("confirmPassword");
-  viewPass.addEventListener('click', () =>{ 
+  if(viewPass){
+      viewPass.addEventListener('click', () =>{ 
 
     if(inputPassword.type == "password"){
           inputPassword.type = "text";
@@ -28,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
           confirmPassword.type = "password";
       }
   });
+  }
       
 });
     

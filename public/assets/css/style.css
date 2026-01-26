@@ -28,6 +28,34 @@ bg-success{background-color:#198754!important}
   font-size: 14px;
 }
 
+.msgFlashActive {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.msgFlashHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.text-truncate {
+  max-width: 250px;     /* ajusta el ancho */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* #btnHelpReport{
+  position: fixed;
+  top: 90%;
+  right: 10px;
+} */
+#btnHelpReport{
+  float: right;
+}
+
+
 /* Stilos Modal adminUser */
 .modal {
   display: none; /* Oculto por defecto */
@@ -49,15 +77,50 @@ bg-success{background-color:#198754!important}
   max-width: 90%;
 }
 
+.modal-content textarea {
+  text-transform: uppercase;
+}
+
+.modal-content h3 {
+  font-family: monospace;
+}
+
 .modal-content label {
   display: block;
   margin-top: 10px;
 }
 
-.modal-content input {
+.modal-content input, select {
   width: 100%;
   padding: 6px;
   margin-top: 5px;
+}
+
+.modal button{
+  margin-top: 10px;
+  width: 100%;
+}
+
+.idInput {
+  background: rgb(0 0 0 / 9%);
+  outline: none !important;
+}
+
+.idInput:hover {
+  cursor: no-drop;
+}
+
+.modal-content textarea {
+  width: 100%;
+  padding: 6px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  resize: vertical; /* Permite redimensionar verticalmente */
+}
+
+#modalHelpReportContent{
+  max-height: 100vh;
+  height: 80%;
 }
 
 .close {
@@ -67,10 +130,10 @@ bg-success{background-color:#198754!important}
 }
 
 /* Stilos Modal adminAlert */
-#modal-alert {
+.modal-loadData {
   display: none; /* Oculto por defecto */
   position: fixed;
-  z-index: 1000;
+  z-index: 2000;
   left: 0;
   top: 0;
   width: 100%;
@@ -78,13 +141,41 @@ bg-success{background-color:#198754!important}
   background-color: rgba(0,0,0,0.5);
 }
 
-.modal-content {
+.content-loadData {
   background: #fff;
-  margin: 10% auto;
+  margin: auto;
+  margin-top: 5vh;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 80%;
   max-width: 90%;
+
+  max-height: 90vh;     /* ocupa casi toda la pantalla */
+  overflow: auto;       /* ✅ SCROLL GENERAL */
+  display: flex;
+  flex-direction: column;
+}
+
+
+.table-container {
+  flex: 1;                    /* ocupa espacio disponible */
+  overflow: auto;             /* scroll horizontal y vertical */
+  max-width: 100%;
+  border: 1px solid #dee2e6;
+}
+
+/* Evita que las columnas se rompan */
+#excelTable {
+  white-space: nowrap;
+}
+
+.table-primary{
+  background: #d4d1d1;
+}
+
+.rowFixedLoadData{
+  width: 50px;
+  text-align: center;
 }
 
 .btn-close {
@@ -92,9 +183,23 @@ bg-success{background-color:#198754!important}
   font-size: 22px;
   cursor: pointer;
 }
+.closeCausaModal {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+#closeLoadModal {
+  padding: 5px;
+  text-align: end;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: rgba(0,0,0,0.5);
+}
 /* fin Modal adminAlert */
 
-.btn-plus-User{
+.btn-plus{
   
   margin: 0px 15px 10px 0px;
   display: flex;
@@ -102,7 +207,8 @@ bg-success{background-color:#198754!important}
   justify-content: flex-end;
 }
 
-.btn-plus-User > .btn{
+.btn-plus > .btn{
+  margin: 5px;
   color: #fff;
   background: rgba(0, 0, 0, .8) !important;
 }
@@ -126,11 +232,60 @@ bg-success{background-color:#198754!important}
 }
 
 
-@media (min-width: 750px) {
+@media (min-width: 1024px) {
+
+  .modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 90%;
+  }
+}
+
+
+@media (max-width: 750px) {
+
+  .modal{
+    top: 80px;
+  }
+
+  .modal button{
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .infoUser-profile{
+    margin: 14%;
+  }
+
+  .infoUser-profile section{
+    font-size: 17px;
+  }
+
+  .profile-opbutton{
+    width: 94%;
+    margin: 10px;
+  }
+
+  .button-export{
+    margin: 10px;
+    width: 94%;
+  }
+
+  .content-chart{
+    padding: 16%;
+  }
+
   .chart{
     display: block;
     box-sizing: border-box;
-    height: 682.8px;
-    width: 682.8px;
+    max-width: 472px; 
+    max-height: 307px;  
+    height: 307px; 
+    width: 472px;
   }
 }
+
+

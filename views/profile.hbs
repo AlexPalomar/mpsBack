@@ -3,21 +3,35 @@
         <div class="col-md-12 mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <h3>Welcome {{user.name}}</h3>
-                    <section>
-                        <div>identificacion: {{user.identification}}</div>
-                        <div>Correo: {{user.email}}</div>
-                        <div>Role: {{user.role}}</div>
-                        <div>Creación: {{formatDate user.createdAt}}</div>
-                        <div>Modificación: {{formatDate user.modifiedAt}}</div>
-                    </section>
+                    <div class="infoUser-profile">
+                        <h3>Bienvenido</h3>
+                        <h4 style="font-weight: bold;">{{user.name}}</h4>
+                        <section>
+                            <div>identificacion: {{user.identification}}</div>
+                            <div>Correo: {{user.email}}</div>
+                            <div>Role: {{user.role}}</div>
+                            <div>Creación: {{formatDate user.createdAt}}</div>
+                            <div>Modificación: {{formatDate user.modifiedAt}}</div>
+                        </section>
+                    </div>
                     <p></p>
                     {{#if (eq user.role "ADMIN")}}
                     <section class="">
-                        <button type="button" class="btn btn-secondary"><a href="/adminUsers">Admin Usuarios</a></button>
-                        <button type="button" class="btn btn-secondary"><a href="/adminServices">Servicios Escalera</a></button>
-                        <button type="button" class="btn btn-secondary"><a href="/adminReport">Admin Reportes</a></button>
+                        <button type="button" class="profile-opbutton btn btn-secondary"><a href="/adminUsers">Admin Usuarios</a></button>
+                        <button type="button" class="profile-opbutton btn btn-secondary"><a href="/adminServices">Servicios Escalera</a></button>
+                        {{!-- <button type="button" class="profile-opbutton btn btn-secondary"><a href="/adminReport">Admin Reportes</a></button> --}}
+                        <button type="button" class="profile-opbutton btn btn-secondary"><a href="/cierreCiclo">Cierre de ciclo</a></button>
+                        <button type="button" class="profile-opbutton btn btn-secondary"><a href="/report/admin">Admin Reportes</a></button>
                     </section>
+                    {{else}}
+                        {{!-- {{#if (eq user.role "SUPERVISOR")}}
+                            <section class="">
+                            <button type="button" class="profile-opbutton btn btn-secondary"><a href="/adminUsers">Admin Usuarios</a></button>
+                            <button type="button" class="profile-opbutton btn btn-secondary"><a href="/adminServices">Servicios Escalera</a></button>
+                            <button type="button" class="profile-opbutton btn btn-secondary"><a href="/cierreCiclo">Cierre de ciclo</a></button>
+                            <button type="button" class="profile-opbutton btn btn-secondary"><a href="/report/admin">Admin Reportes</a></button>
+                        </section>
+                        {{else}} --}}
                     {{/if}}
                 </div>
             </div>

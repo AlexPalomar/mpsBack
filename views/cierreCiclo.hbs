@@ -1,0 +1,330 @@
+<div class="container">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/profile">Perfil</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+    </ol>
+  </nav>
+</div>
+<div class="main-container my-5 align-items-center">
+  <h1 class="mb-4 text-center">{{title}}</h1>
+  {{> message}}
+  <div class="btn-plus">
+    <button type="button" class="btn btn-causa" id="btn-createCausaCierreCiclo">Crear causa cc</button>
+    <button type="button" class="btn btn-create" id="btn-createCierreCiclo">Crear CCiclo</button>
+  </div>
+  <!-- Scroll vertical y horizontal con Bootstrap -->
+  <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
+    <div class="container">
+      <form action="/cierreCiclo" method="POST" class="form-filter">
+        <select class="form-select" name="filter" id="filter-option">
+          <option value="null">Opción a filtrar</option>
+          <option value="idService">ID CCiclo</option>
+          <option value="status">Estado</option>
+          <option value="tecnico">Técnico</option>
+          <option value="superviser">Supervisor</option>
+        </select>
+        <input type="text-capitalize" name="search" class="" id="search" placeholder="Búsqueda">
+        <button class="" type="submit">Consultar</button>
+      </form>
+    </div>
+    <table class="table table-bordered table-hover align-middle" id="adminTable">
+
+      <thead class="table-dark">
+        <tr>
+          <th class="bg-th">#</th>
+          <th class="bg-th">ID CCiclo</th>
+          <th class="bg-th">Cliente</th>
+          <th class="bg-th">Orden</th>
+          <th class="bg-th">Teléfono</th>
+          <th class="bg-th">Dirección</th>
+          <th class="bg-th">Técnico</th>
+          <th class="bg-th">Supervisor</th>
+          <th class="bg-th">Observaciones</th>
+          {{!-- <th class="bg-th">Ubicación</th>
+          <th class="bg-th">Evidencia</th> --}}
+          <th class="bg-th">Fecha Creación</th>
+          <th class="bg-th">Ultima Modificación</th>
+          <th class="bg-th">Estado</th>
+          <th class="bg-th">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each data}}
+        <tr>
+          <td>{{@index}}</td>
+          <td><span class="badge badge-service bg-primary" id="deleteIdService">{{idCCiclo}}</span></td>
+          <td class="text-uppercase">{{cliente}}</td>
+          <td>{{order}}</td>
+          <td>{{phoneNumber}}</td>
+          <td style="max-width: 220px;" class="text-truncate">
+            {{address}}
+          </td>
+          <td class="text-uppercase">{{tecnico}}</td>
+          <td class="text-uppercase">{{superviser}}</td>
+          <td style="max-width: 160px;" class="text-truncate">{{observation}}</td>
+          <td>{{formatDate createdAt}}</td>
+          <td>{{formatDate modifiedAt}}</td>
+          {{!-- <td> --}}
+            {{!-- {{#if evidenceOne}}
+              <a href="{{evidenceOne}}" target="_blank">
+                <img src="{{evidenceOne}}" alt="Evidencia" style="max-width: 100px; max-height: 100px; border-radius:5px;">
+              </a>
+            {{else}}
+              Sin evidencia
+            {{/if}} --}}
+          {{!-- </td> --}}
+          {{!-- <td>{{durationTimeout}}</td> --}}
+          {{!-- <td>{{executeTimeout}}</td> --}}
+          <td>
+            {{#if (eq status "PENDIENTE")}}
+              <span class="btn" style="color: white; background: gray;">{{status}}</span>
+            {{else}}
+              <span class="btn btn-success">{{status}}</span>
+            {{/if}}
+          </td>
+          <td>
+            <button id="btnCierreCicloDetail" type="button" class="btn btn-danger">ver mas</button>
+          </td>
+          <td style="display: none;">{{notesClousure}}</td>
+          <td style="display: none;">{{presentacionComportamiento}}</td>
+          <td style="display: none;">{{esteticaFuncionamiento}}</td>
+          <td style="display: none;">{{recomendacionServicio}}</td>
+          <td style="display: none;">{{promedioNps}}</td>
+          <td style="display: none;">{{causaCierreCiclo}}</td>
+          <td style="display: none;">{{estadoGestionCC}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{!-- MODAL LOAD DATA --}}
+<div class="modal-loadData" id="loadDataModal">
+  <div class="content-loadData">
+    <span class="close" id="closeLoadModal">&times;</span>
+    <button class="btn btn-primary mt-2" id="actionBtnLoadData" disabled>
+      Usar fila seleccionada
+    </button>
+    <!-- CONTENEDOR SCROLL -->
+    <div class="table-container">
+      <table class="table table-bordered table-hover mb-0" id="excelTable">
+        <thead class="table-dark">
+          <tr id="tableHeaders"></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{!-- MODAL CAUSA --}}
+<div class="modal col-md-6" id="causaCierreCicloModal">
+  <div class="modal-content" style="width: 40%;">
+    <span class="close" id="closeCausaModal">&times;</span>
+    <h3>Nueva Causa</h3>
+    <form action="">
+      <label for="">Causa</label>
+      <input type="text" name="causa" id="causa" required>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+  </div>
+</div>
+
+{{!-- create modal --}}
+<div id="createCierreCicloModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeCreateService">&times;</span>
+    <h3>Nuevo Registro</h3>
+
+    <div class="alert alert-danger" id="messageLoadData" style="display: none;" role="alert">
+    </div>
+    <div class="alert alert-warning" role="alert">
+      Cargar datos desde archivo Excel
+      <input type="file" class="alert alert-secondary" id="excelFile" accept=".xlsx,.xls" />
+    </div>
+    <button type="button" class="btn btn-danger" id="resetBtn">Resetear formulario</button>
+
+    <form method="post" class="row" id="createServiceForm" action="/cierreCiclo">
+
+      <div class="col-md-6">
+        <label>Cliente</label>
+        <input type="text" name="cliente" id="cliente" required>
+
+        <label>Teléfono</label>
+        <input type="tel" name="telefono" id="telefono" required>
+
+        <label>Técnico</label>
+        <select id="createCcTecnico" name="tecnico" required>
+          {{!-- <option value="">Seleccione</option> --}}
+          {{#each tecnico}}
+            <option value="{{name}}">{{name}}</option>
+          {{/each}}
+        </select>
+
+        <label>Presentación y Comportamiento</label>
+        <input type="number" name="calificacionPyC" id="calificacionPyC" required>
+
+        <label>Recomendación de Servicios</label>
+        <input type="number" name="calificacionRS" id="calificacionRS" required>
+
+      </div>
+      <div class="col-md-6">
+        <label>Orden</label>
+        <input type="text" name="orden" id="orden" required>
+
+        <label>Dirección</label>
+        <input type="text" name="direccion" id="direccion" required>
+
+        <label>Supervisor</label>
+        <select  class="createCcSupervisor" name="superviser" id="superviser" required>
+          {{!-- <option value="">Seleccione</option> --}}
+          {{#each supervisor}}
+            <option value="{{name}}">{{name}}</option>
+          {{/each}}
+        </select>
+
+        <label>Estado de gestión telefonica</label>
+        <select name="estadoGestionCierreCiclo" id="estadoGestionCierreCiclo" required>
+          <option value="">Seleccione</option>
+          <option value="NO CONTACTO">NO CONTACTO</option>
+          <option value="RESPONDE ESCUESTA">RESPONDE ESCUESTA</option>
+          <option value="NO RESPONDE ESCUESTA">NO RESPONDE ESCUESTA</option>
+          <option value="LLAMAR MAS TARDE">LLAMAR MAS TARDE</option>
+        </select>
+
+        <label>Estética y Funcionamiento</label>
+        <input type="number" name="calificacionEyF" id="calificacionEyF" required>
+
+      </div>
+      
+      <div class="col-md-12">
+
+        <label>Observaciones</label>
+        <textarea name="observaciones" rows="5" required></textarea>
+
+        <label>Fecha Creación</label>
+        <input type="date" name="fechaCreacion" required>
+
+        <label>Estado</label>
+        <input type="text" name="estado" value="PENDIENTE" readonly>
+
+        <button type="submit" class="btn btn-success mt-2">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{{!-- edit modal --}}
+<div id="editCierreCicloModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeCierreCiclo">&times;</span>
+    <h3>Actualizar Registro</h3>
+
+      <form class="row" method="post" id="editCierreCicloForm" action="/cierreCiclo/update">
+        <div class="col-md-6">
+          <label>ID CCiclo</label>
+          <input type="text" class="idInput" id="editCcidCCiclo" name="editCcidCCiclo" required readonly>
+
+          <label>Orden</label>
+          <input type="text" id="editCcorden" name="editCcorden" required>
+
+          <label>Dirección</label>
+          <input type="text" id="editCcdireccion" name="editCcdireccion" required>
+
+          <label>Supervisor</label>
+          <select id="editCcsuperviser" name="editCcsuperviser" required>
+            <option value="">Seleccione</option>
+            {{#each supervisor}}
+              <option value="{{name}}">{{name}}</option>
+            {{/each}}
+          </select>
+
+          <label>Fecha Creación</label>
+          <input type="text" id="editCcfechaCreacion" name="editCcfechaCreacion" required readonly>
+
+          <label>Presentación y Comportamiento</label>
+          <input type="number" name="editCalificacionPyC" id="editCalificacionPyC" required>
+
+        </div>
+
+        <div class="col-md-6">
+          <label>Cliente</label>
+          <input type="text" id="editCccliente" name="editCccliente" required>
+
+          <label>Teléfono</label>
+          <input type="tel" id="editCctelefono" name="editCctelefono" required>
+
+          <label>Técnico</label>
+          <select id="editCctecnico" name="editCctecnico" required>
+            <option value="">Seleccione</option>
+            {{#each tecnico}}
+              <option value="{{name}}">{{name}}</option>
+            {{/each}}
+          </select>
+
+          <label>Última Modificación</label>
+          <input type="text" id="editCcultimaModificacion" name="editCcultimaModificacion" readonly>
+          
+          <label>Causa</label>
+          <select id="editCcCausa" name="editCcCausa" required>
+          <option value="">Seleccione</option>
+            {{#each causa}}
+              <option value="{{causa}}">{{causa}}</option>
+            {{/each}}
+        </select>
+
+          <label>Estética y Funcionamiento</label>
+          <input type="number" name="editCalificacionEyF" id="editCalificacionEyF" required>
+
+        </div>
+
+        <div class="col-md-12" style="margin-top: 10px;">
+          <label>Estado de gestión telefonica</label>
+          <select name="editEstadoGestionCierreCiclo" id="editEstadoGestionCierreCiclo" required>
+            <option value="">Seleccione</option>
+            <option value="NO CONTACTO">NO CONTACTO</option>
+            <option value="RESPONDE ESCUESTA">RESPONDE ESCUESTA</option>
+            <option value="NO RESPONDE ESCUESTA">NO RESPONDE ESCUESTA</option>
+            <option value="LLAMAR MAS TARDE">LLAMAR MAS TARDE</option>
+          </select>
+
+          <label>Recomendación de Servicios</label>
+          <input type="number" name="editCalificacionRS" id="editCalificacionRS" required>
+
+          <select id="editCcestado" name="editCcestado" required>
+            <option value="">Seleccione</option>
+            <option value="PENDIENTE">PENDIENTE</option>
+            <option value="COMPLETADO">COMPLETADO</option>
+          </select>
+
+          <label>Observaciones</label>
+          <textarea class="text-uppercase" id="editCcobservaciones" name="editCcobservaciones" rows="5" style="width:100%" required></textarea>
+
+          <label>Notas de cierre</label>
+          <textarea class="text-uppercase" id="editCcNotas" name="editCcNotas" rows="10" style="width:100%" required></textarea>
+          <button type="submit" class="btn btn-success mt-2">Guardar</button>
+        </div>
+
+        {{!-- <div class="col-md-12 mt-3">
+          <label>Evidencias (máx. 4 imágenes)</label>
+          <input 
+            type="file"
+            name="images"
+            id="images"
+            class="form-control"
+            accept="image/*"
+            multiple
+          >
+          <small class="text-muted">
+            Puedes subir hasta 4 imágenes (jpg, png, etc.)
+          </small>
+          <button type="submit" class="btn btn-success mt-2">Guardar</button>
+        </div> --}}
+        
+      </form>
+  </div>
+</div>
+

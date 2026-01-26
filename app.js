@@ -104,6 +104,7 @@ app.use('/api', require('./routes/messagingFCM'));
 app.use(require('./routes/indexRoutes'));
 app.use(require('./routes/servicesRoutes'));
 app.use(require('./routes/usersRoutes'));
+app.use(require('./routes/cierreCicloRoutes'));
 app.use(require('./routes/reportRoutes'));
 
 
@@ -144,6 +145,70 @@ app.post('/uploads', upload.single('image'), async (req, res) => {
     return res.status(500).json({ success: false, error: 'Upload failed' });
   }
 });
+
+app.post('/upload-all', upload.array('images', 4), async (req, res) => {
+  try {
+    const { serviceId } = req.body;
+
+    if (!serviceId) {
+      return res.status(400).json({
+        success: false,
+        error: 'serviceId es requerido'
+      });
+    }
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'No se enviaron imágenes'
+      });
+    }
+
+    // Subir todas las imágenes a Cloudinary
+    const uploads = await Promise.all(
+      req.files.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: `evidencias/${serviceId}`,
+          upload_preset: 'MpsService',
+          use_filename: true,
+          unique_filename: true,
+          resource_type: 'image',
+        });
+
+        // Eliminar archivo temporal
+        fs.unlinkSync(file.path);
+
+        const expiresAt = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30;
+
+        const signedUrl = cloudinary.url(result.public_id, {
+          version: result.version,
+          resource_type: 'image',
+          sign_url: true,
+          expires_at: expiresAt
+        });
+
+        return {
+          url: signedUrl,
+          public_id: result.public_id
+        };
+      })
+    );
+
+    return res.json({
+      success: true,
+      count: uploads.length,
+      images: uploads
+    });
+
+  } catch (err) {
+    console.error('Error al subir imágenes:', err);
+    return res.status(500).json({
+      success: false,
+      error: 'Upload failed'
+    });
+  }
+});
+
 
 app.use((req, res, next) => {
   res.status(404);

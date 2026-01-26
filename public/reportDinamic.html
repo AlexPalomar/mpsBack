@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes | Datos</title>
+  <link rel="shortcut icon" href="http://localhost/assets/images/ic_launcher.png" style="width: 40;">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+
+  <!-- jQuery UI (ANTES de PivotTable) -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+  <!-- PivotTable -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pivottable@2.23.0/dist/pivot.css">
+  <script src="https://cdn.jsdelivr.net/npm/pivottable@2.23.0/dist/pivot.min.js"></script>
+
+  <!-- TableExport -->
+  <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.24/tableExport.min.js"></script>
+
+  <!-- Custom styles for our template -->
+    <link rel="stylesheet" href="http://localhost/assets/css/bootstrap-theme.css" media="screen" >
+    <link rel="stylesheet" href="http://localhost/assets/css/main.css">
+    <link rel="stylesheet" href="http://localhost/assets/css/style.css">
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    .pivot-container { margin-bottom: 50px; }
+    .export-btn { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top headroom" >
+      <div class="container">
+        <div class="navbar-header">
+          <!-- Button for smallest screens -->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          <a class="navbar-brand" style="margin: 0px 0 0 0;" href="/"><img src="http://localhost/assets/images/ic_launcher.png" alt="Manage ProService" style="width: 60px;"></a>
+        </div>
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://localhost/">&nbsp;Manage ProService</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li class=""><a href="/">Inicio</a></li>
+            <li><a href="#">Acerca de</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li class="nav-item">
+              <a href="/profile" class="nav-link">Perfil/Panel</a>
+            </li>
+            <li class="nav-item">
+              <a href="/logout" class="nav-link">Cerrar sesión</a>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div> 
+    <!-- /.navbar -->
+
+    <div class="modal" id="modalHelpReport">
+      <div class="table-responsive modal-content" id="modalHelpReportContent">
+        <span class="close" id="btnCloseModal">&times;</span>
+        <table class="table table-borderless table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Aggregator</th>
+              <th>¿Qué hace?</th>
+              <th>¿Cuándo usarlo?</th>
+              <th>Ejemplo práctico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Count</strong></td>
+              <td>Cuenta el número de registros</td>
+              <td>Medir volumen</td>
+              <td>Servicios por técnico</td>
+            </tr>
+
+            <tr>
+              <td><strong>Count Unique Values</strong></td>
+              <td>Cuenta valores únicos</td>
+              <td>Evitar duplicados</td>
+              <td>Técnicos únicos por zona</td>
+            </tr>
+
+            <tr>
+              <td><strong>List Unique Values</strong></td>
+              <td>Lista valores sin repetir</td>
+              <td>Mostrar contenido único</td>
+              <td>Estados disponibles</td>
+            </tr>
+
+            <tr>
+              <td><strong>Sum</strong></td>
+              <td>Suma valores numéricos</td>
+              <td>Totales</td>
+              <td>Suma de NPS</td>
+            </tr>
+
+            <tr>
+              <td><strong>Integer Sum</strong></td>
+              <td>Suma solo números enteros</td>
+              <td>Evitar decimales</td>
+              <td>Cantidad de órdenes</td>
+            </tr>
+
+            <tr>
+              <td><strong>Average</strong></td>
+              <td>Calcula el promedio</td>
+              <td>Calificaciones</td>
+              <td>Promedio NPS</td>
+            </tr>
+
+            <tr>
+              <td><strong>Median</strong></td>
+              <td>Valor central</td>
+              <td>Datos con valores extremos</td>
+              <td>Tiempo medio real</td>
+            </tr>
+
+            <tr>
+              <td><strong>Minimum</strong></td>
+              <td>Valor mínimo</td>
+              <td>Rangos bajos</td>
+              <td>Peor calificación</td>
+            </tr>
+
+            <tr>
+              <td><strong>Maximum</strong></td>
+              <td>Valor máximo</td>
+              <td>Rangos altos</td>
+              <td>Mejor calificación</td>
+            </tr>
+
+            <tr>
+              <td><strong>Sum over Sum</strong></td>
+              <td>Suma A / Suma B</td>
+              <td>Ratios</td>
+              <td>Eficiencia</td>
+            </tr>
+
+            <tr>
+              <td><strong>80% Upper Bound</strong></td>
+              <td>Percentil 80</td>
+              <td>Límites SLA</td>
+              <td>Tiempo máximo aceptable</td>
+            </tr>
+
+            <tr>
+              <td><strong>80% Lower Bound</strong></td>
+              <td>Percentil 20</td>
+              <td>Límites bajos</td>
+              <td>Rendimiento mínimo</td>
+            </tr>
+
+            <tr>
+              <td><strong>Fraction of Total</strong></td>
+              <td>Porcentaje del total</td>
+              <td>Distribución</td>
+              <td>% servicios completados</td>
+            </tr>
+
+            <tr>
+              <td><strong>Fraction of Rows</strong></td>
+              <td>% por fila</td>
+              <td>Comparar horizontal</td>
+              <td>% por técnico</td>
+            </tr>
+
+            <tr>
+              <td><strong>Fraction of Columns</strong></td>
+              <td>% por columna</td>
+              <td>Comparar vertical</td>
+              <td>% por estado</td>
+            </tr>
+
+            <tr>
+              <td><strong>Count as Fraction of Total</strong></td>
+              <td>Conteo en porcentaje</td>
+              <td>Gráficos</td>
+              <td>Participación</td>
+            </tr>
+
+            <tr>
+              <td><strong>Count as Fraction of Rows</strong></td>
+              <td>Conteo % por fila</td>
+              <td>Ranking</td>
+              <td>Peso por técnico</td>
+            </tr>
+
+            <tr>
+              <td><strong>Count as Fraction of Columns</strong></td>
+              <td>Conteo % por columna</td>
+              <td>Análisis</td>
+              <td>Distribución por estado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-3" style="margin-top: 100px;">
+      <div class="text-center content-chart col-xs-12 col-md-4">
+        <h3>Usuarios</h3>
+        <canvas class="chart" id="chart-bar" style="max-width: 350px; max-height: 240px;"></canvas>
+      </div>
+      <div class="text-center content-chart col-xs-12 col-md-4">
+        <h3>Servicios Escalera</h3>
+        <div id="messageErrorChart"></div>
+        <canvas class="chart" id="chart-line" style="max-width: 350px; max-height: 240px;"></canvas>
+      </div>
+      <div class="text-center content-chart col-xs-12 col-md-4">
+        <h3>Cierre de Ciclo</h3>
+        <canvas class="chart" id="chart-line2" style="max-width: 350px; max-height: 240px;"></canvas>
+      </div>
+    </div>
+    <div class="container" style="margin-top: 20px;">
+      <button class="btn btn-danger" id="btnHelpReport">Ayuda</button>
+    </div>
+    <p class="text-md-end" style="float: right;">Opciones de uso para tablas dinamicas</p>
+    <div class="container">
+
+      <div class="pivot-container">
+        <h1>Cierre de Ciclo</h1>
+        <button class="btn btn-success export-btn" id="exportServices">Exportar Excel</button>
+        <div id="pivotCierreCiclo"></div>
+      </div>
+
+      <div class="pivot-container" style="margin-top: 20px;">
+        <h1>Usuarios</h1>
+        <button class="btn btn-success export-btn" id="exportUsers">Exportar Excel</button>
+        <div id="pivotUsers"></div>
+      </div>
+
+      <div class="pivot-container">
+        <h1>Servicios Escalera</h1>
+        <button class="btn btn-success export-btn" id="exportServices">Exportar Excel</button>
+        <div id="pivotServices"></div>
+      </div>
+
+    </div>
+  </div>
+  <footer id="footer" class="top-space">
+
+    <div class="footer1">
+      <div class="container">
+        <div class="row">
+          
+          <div class="col-md-3 widget">
+            <h3 class="widget-title">Contacto</h3>
+            <div class="widget-body">
+              <p>+234 23 9873237<br>
+                <a href="mailto:#">some.email@somewhere.com</a><br>
+                <br>
+                234 Hidden Pond Road, Ashland City, TN 37015
+              </p>	
+            </div>
+          </div>
+        </div> <!-- /row of widgets -->
+      </div>
+    </div>
+
+    <div class="footer2">
+      <div class="container">
+        <div class="row">
+          
+          <div class="col-md-6 widget">
+            <div class="widget-body">
+              <p class="simplenav">
+                <a href="/">Inicio</a></li>
+                <a href="#">Acerca de</a></li>
+                <a href="#">Contacto</a></li>
+                <a href="/profile" class="nav-link">Perfil/Panel</a>
+                <a href="/logout" class="nav-link">Cerrar sesión</a>
+              </p>
+
+            </div>
+          </div>
+
+          <div class="col-md-6 widget">
+            <div class="widget-body">
+              <p class="text-right">
+                Copyright &copy; 2025, MPS ProService. 
+              </p>
+            </div>
+          </div>
+
+        </div> <!-- /row of widgets -->
+      </div>
+    </div>
+    
+  </footer>	
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+
+    const ctxb = document.getElementById('chart-bar');
+    const ctxl = document.getElementById('chart-line');
+    const cfg = document.getElementById('chart-line2');
+
+    // Los datos vienen del servidor
+    fetch("http://localhost/adminReportData")
+      .then(r => {
+        if (!r.ok) throw new Error("No autorizado o error API");
+        return r.json();
+      })
+      .then(data => {
+        let chart1 = data.reportUsers;
+        let chart2 = data.reportServices;
+        let chart3 = data.reportCciclo;
+        new Chart(ctxb, {
+          type: 'pie', // Cambia a 'pie', 'line', 'radar', etc.
+          data: {
+            labels: ['Administradores', 'Conductores', 'Tecnicos','Total'],
+            datasets: [{
+              label: 'Usuarios',
+              data: chart1,
+              backgroundColor: ['#4e73df','#1cc88a', '#ffcd56','#ff9f40']
+            }]
+          },
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        new Chart(ctxl, {
+          type: 'polarArea', // Cambia a 'pie', 'line', 'radar', polarArea.
+          data: {
+            labels: ['Completados', 'Cancelados','Total'],
+              datasets: [{
+                label: 'Servicios',
+                data: chart2,
+                backgroundColor: ['#1cc88a', '#ff6384', '#ff9f40']
+              }]
+          },
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      
+      new Chart(cfg, {
+        type: 'line', // Cambia a 'pie', 'line', 'radar', doughnut, etc.
+        data: {
+          labels: data.reportTipificaciones.labels,
+            datasets: [{
+                label: 'Causas de Cierre',
+                data: data.reportTipificaciones.data,
+                backgroundColor: ['#808080', '#1cc88a', '#ff9f40','#4e73df']
+              }
+            ]
+          },
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            }
+          }
+        });
+        
+      })
+      .catch(err => {
+        $(messageErrorChart).html(
+          '<div class="alert alert-danger">Error cargando datos</div>'
+        );
+        console.error(err);
+      });
+
+    function createPivot(container, url, rows, cols, vals) {
+      fetch(url)
+        .then(r => {
+          if (!r.ok) throw new Error("No autorizado o error API");
+          return r.json();
+        })
+        .then(data => {
+          $(container).pivotUI(data, {
+            rows: rows,
+            cols: cols,
+            vals: vals,
+            aggregatorName: "Count",
+            rendererName: "Heatmap"
+          });
+        })
+        .catch(err => {
+          $(container).html(
+            '<div class="alert alert-danger">Error cargando datos</div>'
+          );
+          console.error(err);
+        });
+    }
+
+    createPivot("#pivotUsers", "http://localhost/api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
+    createPivot("#pivotServices", "http://localhost/api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
+    createPivot("#pivotCierreCiclo", "http://localhost/api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
+
+    $("#exportUsers").click(function () {
+      $("#pivotUsers table").tableExport({ type: 'xls', fileName: 'UsuariosPivot' });
+    });
+
+    $("#exportServices").click(function () {
+      $("#pivotServices table").tableExport({ type: 'xls', fileName: 'ServiciosPivot' });
+    });
+
+    $("#exportCierreCiclo").click(function () {
+      $("#pivotCierreCiclo table").tableExport({ type: 'xls', fileName: 'CierreCicloPivot' });
+    });
+    
+  </script>
+
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script src="http://localhost/assets/js/headroom.min.js"></script>
+	<script src="http://localhost/assets/js/jQuery.headroom.min.js"></script>
+	<script src="http://localhost/assets/js/template.js"></script>
+	<script src="http://localhost/assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<div class="row mt-3">
+    <div class="text-center content-chart col-xs-12 col-md-4">
+      <h3>Usuarios</h3>
+      <canvas class="chart" id="chart-bar" style="max-width: 350px; max-height: 240px;"></canvas>
+    </div>
+    <div class="text-center content-chart col-xs-12 col-md-4">
+      <h3>Servicios</h3>
+      <canvas class="chart" id="chart-line" style="max-width: 350px; max-height: 240px;"></canvas>
+    </div>
+    <div class="text-center content-chart col-xs-12 col-md-4">
+      <h3>Servicios</h3>
+      <canvas class="chart" id="chart-line2" style="max-width: 350px; max-height: 240px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctxb = document.getElementById('chart-bar');
+  const ctxl = document.getElementById('chart-line');
+  const cfg = document.getElementById('chart-line2');
+
+  // Los datos vienen del servidor
+  fetch("http://localhost/adminReportData")
+    .then(r => {
+      if (!r.ok) throw new Error("No autorizado o error API");
+      return r.json();
+    })
+    .then(data => {
+      let chart1 = data.reportUsers;
+      let chart2 = data.reportServices;
+      new Chart(ctxb, {
+        type: 'doughnut', // Cambia a 'pie', 'line', 'radar', etc.
+        data: {
+          labels: ['Administradores', 'Conductores', 'Tecnicos','Total'],
+          datasets: [{
+            label: 'Usuarios',
+            data: chart1,
+            backgroundColor: ['#4e73df','#1cc88a', '#ffcd56','#ff9f40']
+          }]
+        }
+      });
+
+      new Chart(ctxl, {
+        type: 'polarArea', // Cambia a 'pie', 'line', 'radar', etc.
+        data: {
+          labels: ['Completados', 'Cancelados','Total'],
+          datasets: [{
+            label: 'Servicios',
+            data: chart2,
+            backgroundColor: ['#1cc88a', '#ff6384', '#ff9f40']
+          }]
+        }
+      });
+
+    new Chart(cfg, {
+      type: 'pie', // Cambia a 'pie', 'line', 'radar', etc.
+      data: {
+        labels: ['Completados', 'Cancelados','Total'],
+          datasets: [{
+            label: 'Servicios',
+            data: chart2,
+            backgroundColor: ['#1cc88a', '#ff6384', '#ff9f40']
+          }]
+        }
+      });
+    })
+    .catch(err => {
+      $(container).html(
+        '<div class="alert alert-danger">Error cargando datos</div>'
+      );
+      console.error(err);
+    });
+</script>       

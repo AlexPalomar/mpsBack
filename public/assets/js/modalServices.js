@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const deleteModal = document.getElementById('deleteModal');
-  const closeBtn = document.querySelector('.close');
+  const closeBtn = document.querySelector('#deleteModalServices');
   const noOption = document.querySelector('#noOption');
   const editForm = document.getElementById('editForm');
 
@@ -22,13 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Cerrar modal
-  closeBtn.addEventListener('click', () => deleteModal.style.display = 'none');
-  window.addEventListener('click', (e) => {
-    if (e.target === deleteModal) deleteModal.style.display = 'none';
-  });
-  noOption.addEventListener('click', () => deleteModal.style.display = 'none');
-  window.addEventListener('click', (e) => {
-    if (e.target === deleteModal) deleteModal.style.display = 'none';
-  });
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => deleteModal.style.display = 'none');
+    window.addEventListener('click', (e) => {
+      if (e.target === deleteModal) deleteModal.style.display = 'none';
+    });
+  }
+
+  if (noOption) {
+    noOption.addEventListener('click', () => deleteModal.style.display = 'none');
+    window.addEventListener('click', (e) => {
+      if (e.target === deleteModal) deleteModal.style.display = 'none';
+    });
+  }
 
 });

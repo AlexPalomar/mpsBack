@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const editmodal = document.getElementById('editModal');
   const deleteUserModal = document.getElementById('deleteUserModal');
-  const closeBtn = document.querySelector('.close');
+  const closeBtnEditUser = document.querySelector('#closeEditUser');
   const noOptionUser = document.querySelector('#noOptionUser');
   const contentInfoUser = document.querySelector('#infoUser');
   const editForm = document.getElementById('editForm');
@@ -60,14 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Cerrar modal
-  closeBtn.addEventListener('click', () => editmodal.style.display = 'none', deleteUserModal.style.display = 'none');
-  window.addEventListener('click', (e) => {
-    if (e.target === editmodal) editmodal.style.display = 'none';
-  });
+  if(closeBtnEditUser){
+    closeBtnEditUser.addEventListener('click', () => editmodal.style.display = 'none', deleteUserModal.style.display = 'none');
+    window.addEventListener('click', (e) => {
+      if (e.target === editmodal) editmodal.style.display = 'none';
+    });
+  }
+
   // cerrar modal deleteUser
-  noOptionUser.addEventListener('click', () => deleteUserModal.style.display = 'none');
-  window.addEventListener('click', (e) => {
-    if (e.target === deleteUserModal) deleteUserModal.style.display = 'none';
-  });
+  if(noOptionUser){
+    noOptionUser.addEventListener('click', () => deleteUserModal.style.display = 'none');
+    window.addEventListener('click', (e) => {
+      if (e.target === deleteUserModal) deleteUserModal.style.display = 'none';
+    });
+  }
 
 });
