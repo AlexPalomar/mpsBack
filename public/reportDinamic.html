@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reportes | Datos</title>
-  <link rel="shortcut icon" href="http://localhost/assets/images/ic_launcher.png" style="width: 40;">
+  <link rel="shortcut icon" href="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/images/ic_launcher.png" style="width: 40;">
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
 
@@ -23,9 +23,9 @@
   <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.24/tableExport.min.js"></script>
 
   <!-- Custom styles for our template -->
-    <link rel="stylesheet" href="http://localhost/assets/css/bootstrap-theme.css" media="screen" >
-    <link rel="stylesheet" href="http://localhost/assets/css/main.css">
-    <link rel="stylesheet" href="http://localhost/assets/css/style.css">
+    <link rel="stylesheet" href="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/css/bootstrap-theme.css" media="screen" >
+    <link rel="stylesheet" href="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/css/main.css">
+    <link rel="stylesheet" href="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/css/style.css">
 
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
@@ -42,7 +42,7 @@
         <div class="navbar-header">
           <!-- Button for smallest screens -->
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-          <a class="navbar-brand" style="margin: 0px 0 0 0;" href="/"><img src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/images/ic_launcher.png" alt="Manage ProService" style="width: 60px;"></a>
+          <a class="navbar-brand" style="margin: 0px 0 0 0;" href="/"><img src="/assets/images/ic_launcher.png" alt="Manage ProService" style="width: 60px;"></a>
         </div>
         <div class="navbar-header">
           <a class="navbar-brand" href="/">&nbsp;Manage ProService</a>
@@ -63,7 +63,15 @@
       </div>
     </div> 
     <!-- /.navbar -->
-
+    <div class="container">
+      <div class="jumbotron"></div>
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/profile">Perfil</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Analísis de reportes</li>
+        </ol>
+      </nav>
+    </div>
     <div class="modal" id="modalHelpReport">
       <div class="table-responsive modal-content" id="modalHelpReportContent">
         <span class="close" id="btnCloseModal">&times;</span>
@@ -209,21 +217,84 @@
     </div>
 
     <!-- Charts -->
-    <div class="row mt-3" style="margin-top: 100px;">
+    <div class="row mt-3" id="content-chartPanel">
       <div class="text-center content-chart col-xs-12 col-md-4">
-        <h3>Usuarios</h3>
-        <canvas class="chart" id="chart-bar" style="max-width: 350px; max-height: 240px;"></canvas>
+        <h3>NPS</h3>
+        <canvas class="chart" id="chart-nps" style="max-width: 350px; max-height: 240px;"></canvas>
       </div>
       <div class="text-center content-chart col-xs-12 col-md-4">
         <h3>Servicios Escalera</h3>
         <div id="messageErrorChart"></div>
-        <canvas class="chart" id="chart-line" style="max-width: 350px; max-height: 240px;"></canvas>
+        <canvas class="chart" id="chart-services" style="max-width: 350px; max-height: 240px;"></canvas>
       </div>
       <div class="text-center content-chart col-xs-12 col-md-4">
-        <h3>Cierre de Ciclo</h3>
-        <canvas class="chart" id="chart-line2" style="max-width: 350px; max-height: 240px;"></canvas>
+        <h3>Usuarios</h3>
+        <div id="messageErrorChart"></div>
+        <canvas class="chart" id="chart-users" style="max-width: 350px; max-height: 240px;"></canvas>
       </div>
     </div>
+
+    <div class="dashboardfilter row mt-3">
+      <div class="col-xs-12 col-md-6" id="box-tipif">
+        <div class="row mt-3 input-group col-md-12" id="panel-tipif" style="border: solid;">
+          <h4 class="text-center">TIPIFICACIÓN</h4>
+          <div class="input-group-prepend col-md-8">
+            <div class="row col-md-12">
+              <div class="col-md-6"><label for="">Fecha inicio</label></div>
+              <div class="col-md-6"><label for="">Fecha final</label></div>
+            </div>
+            <div class="row col-md-12">
+              <input class="input-dateFilter"  type="date" id="fromDateTipif">
+              <input class="input-dateFilter" type="date" id="toDateTipif">
+            </div>
+          </div>
+          <select class="col-md-4" id="npsType" style="height: 45px;">
+            <option value="">TIPIFICACIÓN</option>
+            <option value="">TODOS</option>
+            <option value="PROMOTOR">PROMOTOR</option>
+            <option value="NEUTRO">NEUTRO</option>
+            <option value="DETRACTOR">DETRACTOR</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6" id="box-indicadorNps">
+        <div class="row mt-3 input-group col-md-12" id="panel-indicadorNps" style="border: solid;">
+          <h4 class="text-center">CALIFICACIÓN NPS</h4>
+          <div class="input-group-prepend col-md-8">
+            <div class="row col-md-12">
+              <div class="col-md-6"><label for="">Fecha inicio</label></div>
+              <div class="col-md-6"><label for="">Fecha final</label></div>
+            </div>
+            <div class="row col-md-12">
+              <input class="input-dateFilter"  type="date" id="fromDateCountNps">
+              <input class="input-dateFilter" type="date" id="toDateCountNps">
+            </div>
+          </div>
+          <button class="col-md-4" id="npsCount" style="height: 50px; border: solid 0.5px; background: white;">BUSCAR</button>
+          <!-- <select class="col-md-4" id="npsCount" style="height: 45px;">
+            <option value="">TIPIFICACIÓN</option>
+            <option value="">TODOS</option>
+            <option value="PROMOTOR">PROMOTOR</option>
+            <option value="NEUTRO">NEUTRO</option>
+            <option value="DETRACTOR">DETRACTOR</option>
+          </select> -->
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3 d-flex justify-content-center col-md-12" id="content-chartCanvas">
+        <div class="alert alert-danger col-md-6" id="errorFilterTipif" style="margin-top: 10px;" hidden>Debe seleccionar un rango de fechas.</div>
+        <div class="text-center content-chart col-xs-12 col-md-6" id="containerChartTipif">
+          <canvas class="size-chartCanvas" id="chart-cierreCicloTipif"></canvas>
+        </div>
+      <div class="text-center col-xs-12 col-md-6" id="chart-containerCC">
+        <div class="alert alert-danger col-md-6" id="errorFilterCountNps" style="margin-top: 10px;" hidden>Debe seleccionar un rango de fechas.</div>
+        <div class="text-center content-chart col-xs-12 col-md-12" id="containerChartTipif">
+          <input id="box-percentNps" hidden></input>
+          <canvas class="size-chartCanvas" id="chart-cierreCiclo"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div class="container" style="margin-top: 20px;">
       <button class="btn btn-danger" id="btnHelpReport">Ayuda</button>
     </div>
@@ -304,31 +375,91 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
 
-    const ctxb = document.getElementById('chart-bar');
-    const ctxl = document.getElementById('chart-line');
-    const cfg = document.getElementById('chart-line2');
+    const chartNps = document.getElementById('chart-nps');
+    const chartServices = document.getElementById('chart-services');
+    const chartUsers = document.getElementById('chart-users');
+    var cierreCicloTipificacion = document.getElementById('chart-cierreCicloTipif');
+    const chartCierreCiclo = document.getElementById('chart-cierreCiclo');
+    var boxNpsScore = document.getElementById('box-percentNps');
+
+    var chartCierreCicloTipif = null;
+    var chartCierreCicloCountNps = null;
+
+    // Colores de fondo con opacidad
+    var redBackOpacity =  'rgba(255, 99, 132, 0.2)';
+    var orangeBackOpacity = 'rgba(255, 159, 64, 0.2)';
+    var yellowBackOpacity =  'rgba(255, 205, 86, 0.2)';
+    var greenBackOpacity =  'rgba(75, 192, 192, 0.2)';
+    var blueBackOpacity =  'rgba(54, 162, 235, 0.2)';
+    var purpleBackOpacity =  'rgba(153, 102, 255, 0.2)';
+    var grayBackOpacity =  'rgba(201, 203, 207, 0.2)';
+
+    // colores de fondo para bordes
+    var redBorder  = 'rgb(255, 99, 132)';
+    var orangeBorder  = 'rgb(255, 159, 64)';
+    var yellowBorder  = 'rgb(255, 205, 86)';
+    var greenBorder  = 'rgb(75, 192, 192)';
+    var blueBorder  = 'rgb(54, 162, 235)';
+    var purpleBorder  = 'rgb(153, 102, 255)';
+    var grayBorder  = 'rgb(201, 203, 207)';
 
     // Los datos vienen del servidor
-    fetch("https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/adminReportData")
+    fetch("/adminReportData")
       .then(r => {
         if (!r.ok) throw new Error("No autorizado o error API");
         return r.json();
       })
       .then(data => {
+
+        // KPI NPS
+        // console.log(data.npsResumen.npsScore);
+
+        // Pie Promotor / Neutro / Detractor
+        const npsPie = [
+          data.npsResumen.promotores,
+          data.npsResumen.neutros,
+          data.npsResumen.detractores,
+          data.npsResumen.npsScore
+        ];
+        var npsSinScore = [];
+        npsPie.forEach((value, index) => {
+          
+          if(index <= 2){
+            npsSinScore.push(value);
+          }
+        });
+        var npsScore = npsPie[3];
+        var ENC = npsSinScore.reduce((a, b) => a + b, 0);
+        if(boxNpsScore.hidden) boxNpsScore.hidden = false;
+        boxNpsScore.value = 'NPS ' + npsScore + '%  -  ENC '+ ENC;
+
+        // Gráfica causas detractores
+        const labels = data.npsCausasDetractores.labels;
+        const values = data.npsCausasDetractores.data;
+        
         let chart1 = data.reportUsers;
         let chart2 = data.reportServices;
         let chart3 = data.reportCciclo;
-        new Chart(ctxb, {
-          type: 'pie', // Cambia a 'pie', 'line', 'radar', etc.
+        let npsFiltrado = data.npsFiltrado;
+        Chart.register(ChartDataLabels);
+
+
+        new Chart(chartNps, {
+          type: 'doughnut', // Cambia a 'pie', 'line', 'radar', 'doughnut', etc.
           data: {
-            labels: ['Administradores', 'Conductores', 'Tecnicos','Total'],
+            labels: ['Promotores', 'Neutros', 'Detractores', 'NPS'],
             datasets: [{
-              label: 'Usuarios',
-              data: chart1,
-              backgroundColor: ['#4e73df','#1cc88a', '#ffcd56','#ff9f40']
+              label: 'NPS',
+              data: npsPie,
+              // backgroundColor: ['#4e73df','#1cc88a', '#ffcd56','#ff9f40']
+              backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(75, 192, 192, 0.2)','rgba(255, 205, 86, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+              borderColor: ['rgb(54, 162, 235)', 'rgb(75, 192, 192)', 'rgb(255, 205, 86)', 'rgb(255, 159, 64)'],
+              borderWidth: 1
             }]
           },
           options: {
+            responsive: true,
+            plugins: [ChartDataLabels],
             plugins: {
               tooltip: {
                 callbacks: {
@@ -338,22 +469,76 @@
                     return `${label}: ${value}`;
                   }
                 }
-              }
+              },
+              datalabels: {
+                anchor: 'center',
+                align: 'bottom',
+                color: '#000000',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: (value) => value > 0 ? value : ''
+              },
+            },
+          }
+        });
+
+        new Chart(chartUsers, {
+          type: 'doughnut', // Cambia a 'pie', 'line', 'radar', etc.
+          data: {
+            labels: ['Administradores', 'Conductores', 'Tecnicos','Total'],
+            datasets: [{
+              label: 'Usuarios',
+              data: chart1,
+              // backgroundColor: ['#4e73df','#1cc88a', '#ffcd56','#ff9f40']
+              backgroundColor: [blueBackOpacity, greenBackOpacity, yellowBackOpacity, orangeBackOpacity],
+              borderColor: [blueBorder, greenBorder, yellowBorder, orangeBorder],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: [ChartDataLabels],
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              },
+              datalabels: {
+                anchor: 'center',
+                align: 'bottom',
+                color: '#000000',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: (value) => value > 0 ? value : ''
+              },
             }
           }
         });
 
-        new Chart(ctxl, {
+        
+        new Chart(chartServices, {
           type: 'polarArea', // Cambia a 'pie', 'line', 'radar', polarArea.
           data: {
             labels: ['Completados', 'Cancelados','Total'],
               datasets: [{
                 label: 'Servicios',
                 data: chart2,
-                backgroundColor: ['#1cc88a', '#ff6384', '#ff9f40']
+                // backgroundColor: ['#1cc88a', '#ff6384', '#ff9f40']
+                backgroundColor: [greenBackOpacity, redBackOpacity, orangeBackOpacity],
+                borderColor: [greenBorder, redBorder, orangeBorder],
+                borderWidth: 1
               }]
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               tooltip: {
                 callbacks: {
@@ -363,23 +548,37 @@
                     return `${label}: ${value}`;
                   }
                 }
-              }
+              },
+              datalabels: {
+                anchor: 'center',
+                align: 'bottom',
+                color: '#000000',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: (value) => value > 0 ? value : ''
+              },
             }
           }
         });
-      
-      new Chart(cfg, {
-        type: 'line', // Cambia a 'pie', 'line', 'radar', doughnut, etc.
+        
+        chartCierreCicloCountNps = new Chart(chartCierreCiclo, {
+        type: 'bar', // Cambia a 'pie', 'line', 'radar', doughnut, etc.
         data: {
-          labels: data.reportTipificaciones.labels,
-            datasets: [{
-                label: 'Causas de Cierre',
-                data: data.reportTipificaciones.data,
-                backgroundColor: ['#808080', '#1cc88a', '#ff9f40','#4e73df']
-              }
+          labels: ['Promotores', 'Neutros', 'Detractores'],
+            datasets: [
+              {
+                label: 'CALIFICACIÓN',
+                data: npsSinScore,
+                backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 205, 86, 0.2)','rgba(255, 99, 132, 0.2)'],
+                // backgroundColor: ['#9ef3c5', '#f0ddae','#faafbd'],
+                borderColor: ['#3D9B9B', '#D4A945', '#D5526F'],
+                borderWidth: 1
+              },
             ]
           },
           options: {
+            responsive: true,
             plugins: {
               tooltip: {
                 callbacks: {
@@ -389,7 +588,78 @@
                     return `${label}: ${value}`;
                   }
                 }
-              }
+              },
+              datalabels: {
+                anchor: 'end',
+                align: 'bottom',
+                color: '#000000',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: (value) => {
+                  var divider = value / ENC;
+                  var percent = divider * 100;
+                  return value > 0 ? '  '+percent.toFixed(1) +'%' + '\n'+ 'CANT '+value: '';
+                }
+              },
+            }
+          }
+        });
+
+        
+        var resultadoconsolidado = [];
+        var procedimientos = 0;
+          var manipulacion = 0;
+          var equipos = 0;
+        npsFiltrado.forEach((result)=>{
+          if (result.causaCierre == 'PROCEDIMIENTOS TÉCNICOS') {
+            procedimientos++;
+          } else if (result.causaCierre == 'MANIPULACIÓN CLIENTE') {
+            manipulacion++;
+          } else {
+            equipos++;
+          }
+
+        });
+        resultadoconsolidado = [procedimientos, manipulacion, equipos];
+
+        chartCierreCicloTipif = new Chart(cierreCicloTipificacion, {
+          type: 'bar', // Cambia a 'pie', 'line', 'radar', 'doughnut', etc.
+          data: {
+            labels: ['Proced.. Técnicos', 'Manipu.. Cliente', 'Equipos\nClaro'],
+            datasets: [{
+              label: 'TIPIFICACIÓN',
+              data: resultadoconsolidado,
+              backgroundColor: [ 'rgba(201, 203, 207, 0.2)', 'rgba(255, 159, 64, 0.2)','rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgb(201, 203, 207)', 'rgb(255, 159, 64)', '#D5526F'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              },
+              datalabels: {
+                anchor: 'end',
+                align: 'bottom',
+                color: '#000000',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: (value) => {
+                  var divider = value / ENC;
+                  var percent = divider * 100;
+                  return value > 0 ? '  '+percent.toFixed(1) +'%' + '\n'+ 'CANT '+value: '';
+                }
+              },
             }
           }
         });
@@ -400,6 +670,194 @@
           '<div class="alert alert-danger">Error cargando datos</div>'
         );
         console.error(err);
+      });
+
+      // FILTRO TIPIFICACION NPS + FECHA
+      var nps = document.getElementById('npsType');
+      
+      nps.addEventListener('change', async () => {
+        var from = document.getElementById('fromDateTipif').value;
+        var to = document.getElementById('toDateTipif').value;
+
+        var params = new URLSearchParams();
+        
+        if (from) params.append('from', from);
+        if (to) params.append('to', to);
+        if (nps) params.append('nps', nps.value);
+        if(from == '' || to == ''){
+          var errorFilterTipif = document.getElementById('errorFilterTipif');
+          errorFilterTipif.removeAttribute('hidden');
+          setTimeout(() => {
+            errorFilterTipif.setAttribute('hidden', true);
+          }, 3000);
+        }else{
+          from = ''; 
+          to = '';
+
+          fetch(`/tipificacionNpsFilter?${params.toString()}`)
+            .then(r => r.json())
+            .then(data => {
+              // console.log('NPS filtrado:', data.npsFiltrado);
+              
+
+              const npsFiltrado = data.npsFiltrado;
+              var resultadoconsolidado = [];
+              var procedimientos = 0;
+              var manipulacion = 0;
+              var equipos = 0;
+              npsFiltrado.forEach((result)=>{
+                if (result.causaCierre == 'PROCEDIMIENTOS TÉCNICOS') {
+                  procedimientos++;
+                } else if (result.causaCierre == 'MANIPULACIÓN CLIENTE') {
+                  manipulacion++;
+                } else {
+                  equipos++;
+                }
+
+              });
+              resultadoconsolidado = [procedimientos, manipulacion, equipos];
+
+              if (chartCierreCicloTipif) {
+                chartCierreCicloTipif.destroy();
+              }
+
+              chartCierreCicloTipif = new Chart(cierreCicloTipificacion, {
+                type: 'bar', // Cambia a 'pie', 'line', 'radar', 'doughnut', etc.
+                data: {
+                  labels: ['Proced.. Técnicos', 'Manipu.. Cliente', 'Equipos\nClaro'],
+                  datasets: [{
+                    label: 'TIPIFICACIÓN',
+                    data: resultadoconsolidado,
+                    backgroundColor: [ 'rgba(201, 203, 207, 0.2)', 'rgba(255, 159, 64, 0.2)','rgba(255, 99, 132, 0.2)'],
+                    borderColor: ['rgb(201, 203, 207)', 'rgb(255, 159, 64)', '#D5526F'],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  plugins: [ChartDataLabels],
+                  plugins: {
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const label = context.label || '';
+                          const value = context.raw || 0;
+                          return `${label}: ${value}`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      anchor: 'end',
+                      align: 'bottom',
+                      color: '#000000',
+                      font: {
+                        weight: 'bold'
+                      },
+                      formatter: (value) => {
+                        tetalENC = procedimientos + manipulacion + equipos;
+                        var divider = value / tetalENC;
+                        var percent = divider * 100;
+                        return value > 0 ? '  '+percent.toFixed(1) +'%' + '\n'+ 'CANT '+value: '';
+                      }
+                    },
+                  }
+                }
+              });
+          })
+          .catch(err => console.error(err));
+        }
+      });
+
+      // FILTRO CONTEO NPS + FECHA
+      var npsCount = document.getElementById('npsCount');
+
+      npsCount.addEventListener('click', async () => {
+        var from = document.getElementById('fromDateCountNps').value;
+        var to = document.getElementById('toDateCountNps').value;
+        var nps = document.getElementById('npsCount');
+        
+        // var npsScoreLabel = document.getElementById('npsScoreFilter');
+
+        var cierreCicloTipificacion = document.getElementById('chart-cierreCicloTipif');
+        var params = new URLSearchParams();
+        
+        if (from) params.append('from', from);
+        if (to) params.append('to', to);
+        if (nps) params.append('nps', nps.value);
+        if(from == '' || to == ''){
+          var errorFiltererrorFilterCountNpsTipif = document.getElementById('errorFilterCountNps');
+          errorFilterCountNps.removeAttribute('hidden');
+          setTimeout(() => {
+            errorFilterCountNps.setAttribute('hidden', true);
+          }, 3000);
+        }else{
+          from = ''; 
+          to = '';
+
+          fetch(`/conteoNpsFilter?${params.toString()}`)
+            .then(r => r.json())
+            .then(data => {
+              var conteoNpsFiltrado = data.conteoNpsFiltrado;
+              conteoNpsFiltrado;
+              var promotores = conteoNpsFiltrado.promotores;
+              var neutros = conteoNpsFiltrado.neutros;
+              var detractores = conteoNpsFiltrado.detractores;
+              var totalEncuestas = conteoNpsFiltrado.totalEncuestas;
+              var npsScore = conteoNpsFiltrado.npsScore;
+              if(boxNpsScore.hidden) boxNpsScore.hidden = false;
+              boxNpsScore.value = 'NPS ' + npsScore + '  -  ENC '+ totalEncuestas;
+              // console.log(conteoNpsFiltrado);
+
+              if (chartCierreCicloCountNps) {
+                chartCierreCicloCountNps.destroy();
+              }
+              
+              chartCierreCicloCountNps = new Chart(chartCierreCiclo, {
+                type: 'bar', // Cambia a 'pie', 'line', 'radar', 'doughnut', etc.
+                data: {
+                  labels: ['Promotores', 'Neutros', 'Detractores'],
+                  datasets: [{
+                    label: 'TIPIFICACIÓN',
+                    data: [promotores, neutros, detractores],
+                    // backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 205, 86, 0.2)','rgba(255, 99, 132, 0.2)'],
+                    // borderColor: ['#3D9B9B', '#D4A945', '#D5526F'],
+                    backgroundColor: [greenBackOpacity, 'rgba(255, 205, 86, 0.2)','rgba(255, 99, 132, 0.2)'],
+                    borderColor: [greenBorder, '#D4A945', '#D5526F'],
+                    borderWidth: 1
+                  }] 
+                },
+                options: {
+                  responsive: true,
+                  plugins: [ChartDataLabels],
+                  plugins: {
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          const label = context.label || '';
+                          const value = context.raw || 0;
+                          return `${label}: ${value}`;
+                        }
+                      }
+                    },
+                    datalabels: {
+                      anchor: 'end',
+                      align: 'bottom',
+                      color: '#000000',
+                      font: {
+                        weight: 'bold'
+                      },
+                      formatter: (value) => {
+                        var divider = value / totalEncuestas;
+                        var percent = divider * 100;
+                        return value > 0 ? '  '+percent.toFixed(1) +'%' + '\n'+ 'CANT '+value: '';
+                      }
+                    },
+                  }
+                }
+              });
+          })
+          .catch(err => console.error(err));
+        }
       });
 
     function createPivot(container, url, rows, cols, vals) {
@@ -425,9 +883,9 @@
         });
     }
 
-    createPivot("#pivotUsers", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
-    createPivot("#pivotServices", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
-    createPivot("#pivotCierreCiclo", "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/api/pivot/cciclo", ["Tecnico","promedioNps"], ["Estado", "causaCierre"]);
+    createPivot("#pivotCierreCiclo", "/api/pivot/cciclo", ["Tecnico","promedioNps"], ["causaCierre"]);
+    createPivot("#pivotUsers", "/api/pivot/users", ["Rol"],['Identificación'], ["Nombre"], ["Estado"], ['FechaCreacion']);
+    createPivot("#pivotServices", "/api/pivot/services", ["Tecnico"], ["Estado"], ["IDServicio"]);
 
     $("#exportUsers").click(function () {
       $("#pivotUsers table").tableExport({ type: 'xls', fileName: 'UsuariosPivot' });
@@ -442,11 +900,13 @@
     });
     
   </script>
+  <!-- Charts Datalabels -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="http://localhost/js/headroom.min.js"></script>
-	<script src="http://localhost/js/jQuery.headroom.min.js"></script>
-	<script src="http://localhost/js/template.js"></script>
-	<script src="http://localhost/js/main.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/js/headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/js/jQuery.headroom.min.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/js/template.js"></script>
+	<script src="https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/assets/js/main.js"></script>
 </body>
 </html>

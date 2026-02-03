@@ -47,4 +47,30 @@ document.addEventListener('DOMContentLoaded', () => {
         alertCloseMessage.style.display = 'none';
       });
     }
+    
+    // scroll
+    const scrollTop = document.getElementById('scrollTop');
+    const scrollBottom = document.getElementById('scrollBottom');
+    const scrollContent = document.querySelector('.scroll-content');
+
+    if (!scrollTop || !scrollBottom) return;
+
+    function syncScrollWidth() {
+      scrollContent.style.width = scrollBottom.scrollWidth + 'px';
+    }
+    
+    syncScrollWidth();
+    window.addEventListener('resize', syncScrollWidth);
+  
+    scrollTop.addEventListener('scroll', () => {
+      scrollBottom.scrollLeft = scrollTop.scrollLeft;
+    });
+  
+    scrollBottom.addEventListener('scroll', () => {
+      scrollTop.scrollLeft = scrollBottom.scrollLeft;
+    });
+
+
 });
+
+  

@@ -6,19 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadDataModal = document.querySelector('#loadDataModal');
   const fileInput = document.getElementById('excelFile');
   const resetBtn = document.getElementById('resetBtn');
-  const btnCreateCausaCierreCiclo = document.getElementById('btn-createCausaCierreCiclo');
-  const causaCierreCicloModal = document.getElementById('causaCierreCicloModal');
-  const closeCausaModal = document.getElementById('closeCausaModal');
+  const btnImportCierreCiclo = document.getElementById('btn-importFileCierreCiclo');
+  const importCierreCicloModal = document.getElementById('importCierreCicloModal');
+  const closeImportModal = document.getElementById('closeImportModal');
+  const btnimportBase = document.getElementById('btn-importBase');
 
 
-    if(btnCreateCausaCierreCiclo && closeCausaModal && btnCreateCC && closeBtnAlertCC && modalCierreCiclo && closeLoadModal && loadDataModal && fileInput && resetBtn){
+    if(btnImportCierreCiclo && closeImportModal && btnCreateCC && closeBtnAlertCC && modalCierreCiclo && closeLoadModal && loadDataModal && fileInput && resetBtn){
 
-      btnCreateCausaCierreCiclo.addEventListener('click', (e) => {
-        causaCierreCicloModal.style.display = 'block';
+      btnImportCierreCiclo.addEventListener('click', (e) => {
+        importCierreCicloModal.style.display = 'block';
         document.body.style.overflow = 'hidden';
       });
-      closeCausaModal.addEventListener('click', (e) => {
-        causaCierreCicloModal.style.display = 'none';
+      closeImportModal.addEventListener('click', (e) => {
+        importCierreCicloModal.style.display = 'none';
       });
 
       btnCreateCC.addEventListener('click', (e) => {
@@ -68,6 +69,78 @@ document.addEventListener('DOMContentLoaded', () => {
         
       };
       reader.readAsArrayBuffer(file);
+    });
+
+    // Convierte datos excel a json y envia al backend
+    var jsonData = {};
+    btnimportBase.addEventListener('click', (e) => {
+      e.preventDefault();
+      const file = document.getElementById('inputImport').files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const data = new Uint8Array(event.target.result);
+        var containerBreadcrumb = document.getElementById('containerBreadcrumb');
+
+        // Leer Excel
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // Tomar la primera hoja
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        // Convertir a JSON
+        jsonData = XLSX.utils.sheet_to_json(sheet);
+        // console.log('jsonData: ', jsonData);
+        // Enviar datos al backend
+        fetch('/import-cierre-ciclo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonData),
+        })
+          .then(response => response.json())
+          .then(resp => {
+            if (resp.success) {
+              importCierreCicloModal.style.display = 'none';
+              html = '<div class="alert alert-success text-center msgFlashActive">'+
+              '<p>Registros insertados: '+ resp.insertados+'</p>'+
+              '<p>Registros duplicados: ' + resp.duplicados + '</p>'+
+              '<p>Total de registros: ' + resp.totalExcel + '</p>'+
+              '</div>';
+              
+              containerBreadcrumb.style.display = 'block';
+              containerBreadcrumb.innerHTML = html;
+              setTimeout(()=> {
+                containerBreadcrumb.style.display = 'none';
+                window.location.href = "http://localhost/cierreCiclo";
+              }, 5000);
+
+            } else {
+              importCierreCicloModal.style.display = 'none';
+              html = '<div class="alert alert-danger text-center msgFlashActive"><p>'+ resp.error +'</p>';
+              containerBreadcrumb.style.display = 'block';
+              containerBreadcrumb.innerHTML = html;
+              setTimeout(()=> {
+                containerBreadcrumb.style.display = 'none';
+              }, 3000);
+            }
+          })
+          .catch((error) => {
+            importCierreCicloModal.style.display = 'none';
+            html = '<div class="alert alert-danger text-center msgFlashActive">'+ error +'</p>';
+            containerBreadcrumb.style.display = 'block';
+            containerBreadcrumb.innerHTML = html;
+            setTimeout(()=> {
+              containerBreadcrumb.style.display = 'none';
+            }, 3000);
+          });
+      };
+      reader.readAsArrayBuffer(file);
+
     });
 
     resetBtn.addEventListener('click', () => {
@@ -208,6 +281,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-      
 });
     

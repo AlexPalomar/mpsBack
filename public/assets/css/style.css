@@ -121,6 +121,7 @@ bg-success{background-color:#198754!important}
 #modalHelpReportContent{
   max-height: 100vh;
   height: 80%;
+  top: -7%;
 }
 
 .close {
@@ -231,6 +232,47 @@ bg-success{background-color:#198754!important}
   height: 40px !important;
 }
 
+#content-chartPanel{
+  margin-bottom: 20px;
+}
+
+.dashboardFilter{
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.input-dateFilter{
+  width: 48%;
+}
+
+#box-percentNps{
+  font-weight: 800;
+  border: none;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.size-chartCanvas{
+  max-width: 800px; 
+  max-height: 300px; 
+  margin: 10px;
+}
+
+#content-chartCanvas {
+    margin-bottom: 4%;
+  }
+
+  /* scroll */
+.scroll-top {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scroll-top .scroll-content {
+  height: 1px;
+}
+/* scroll */
 
 @media (min-width: 1024px) {
 
@@ -260,8 +302,8 @@ bg-success{background-color:#198754!important}
     margin: 14%;
   }
 
-  .infoUser-profile section{
-    font-size: 17px;
+  .text-profile{
+    font-size: 16px !important;
   }
 
   .profile-opbutton{
@@ -275,17 +317,41 @@ bg-success{background-color:#198754!important}
   }
 
   .content-chart{
-    padding: 16%;
+    padding-left: 10%;
+    padding-right: 10%;
   }
 
-  .chart{
+  /* .chart{
     display: block;
     box-sizing: border-box;
     max-width: 472px; 
     max-height: 307px;  
     height: 307px; 
     width: 472px;
+  } */
+  .chart{
+    max-width: 100%;
+    max-height: 240px;
+    display: block;
+    box-sizing: border-box;
+    height: 240px;
+    width: 80%;
+    padding-left: 10%;
   }
+
+  #panel-tipif{
+    width: 100%;
+  }
+
+  #panel-indicadorNps{
+    width: 100%;
+  }
+  
+  #content-chartCanvas canvas {
+    width: 400.4px;
+    float: inline-end;
+  }
+  
 }
 
 
