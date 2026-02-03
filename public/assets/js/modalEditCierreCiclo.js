@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const contentInfoCc = document.querySelector('#infoUser');
   const editForm = document.getElementById('editCierreCicloForm');
 
-  
-    closeBtnCc.addEventListener('click', () => {
-      editCierreCicloModal.style.display = 'none';
-    });
+    if(closeBtnCc){
+
+      closeBtnCc.addEventListener('click', () => {
+        editCierreCicloModal.style.display = 'none';
+      });
+    }
 
     // Asignar evento a todos los botones Editar
     document.querySelectorAll('#btnCierreCicloDetail').forEach(button => {
@@ -113,18 +115,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Cerrar modal
+      closeBtnCc.addEventListener('click', () => editCierreCicloModal.style.display = 'none', editCierreCicloModal.style.display = 'none');
+      window.addEventListener('click', (e) => {
+        if (e.target === editCierreCicloModal) editCierreCicloModal.style.display = 'none';
+      });
+      // // cerrar modal deleteUser
+      // noOptionUser.addEventListener('click', () => editCierreCicloModal.style.display = 'none');
+      window.addEventListener('click', (e) => {
+        if (e.target === editCierreCicloModal) editCierreCicloModal.style.display = 'none';
+      });
+
     });
 
 
-    // Cerrar modal
-    closeBtnCc.addEventListener('click', () => editCierreCicloModal.style.display = 'none', editCierreCicloModal.style.display = 'none');
-    window.addEventListener('click', (e) => {
-      if (e.target === editCierreCicloModal) editCierreCicloModal.style.display = 'none';
-    });
-    // // cerrar modal deleteUser
-    // noOptionUser.addEventListener('click', () => editCierreCicloModal.style.display = 'none');
-    window.addEventListener('click', (e) => {
-      if (e.target === editCierreCicloModal) editCierreCicloModal.style.display = 'none';
-    });
+    
   
 });
