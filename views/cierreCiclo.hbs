@@ -5,16 +5,21 @@
       <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
     </ol>
   </nav>
+  <div class="" id="containerBreadcrumb" style="display: none;"></div>
 </div>
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
   {{> message}}
   <div class="btn-plus">
-    <button type="button" class="btn btn-causa" id="btn-createCausaCierreCiclo">Crear causa cc</button>
+    <button type="button" class="btn btn-causa" id="btn-importFileCierreCiclo">Importar base xlsx</button>
     <button type="button" class="btn btn-create" id="btn-createCierreCiclo">Crear CCiclo</button>
   </div>
   <!-- Scroll vertical y horizontal con Bootstrap -->
-  <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
+  <!-- SCROLL HORIZONTAL SUPERIOR -->
+<div class="scroll-top" id="scrollTop">
+  <div class="scroll-content"></div>
+</div>
+  <div class="table-responsive fs-4 " id="scrollBottom" style="max-height: 70vh; overflow-y: auto;">
     <div class="container">
       <form action="/cierreCiclo" method="POST" class="form-filter">
         <select class="form-select" name="filter" id="filter-option">
@@ -119,15 +124,15 @@
   </div>
 </div>
 
-{{!-- MODAL CAUSA --}}
-<div class="modal col-md-6" id="causaCierreCicloModal">
+{{!-- MODAL IMPORT --}}
+<div class="modal col-md-6" id="importCierreCicloModal">
   <div class="modal-content" style="width: 40%;">
-    <span class="close" id="closeCausaModal">&times;</span>
-    <h3>Nueva Causa</h3>
+    <span class="close" id="closeImportModal">&times;</span>
+    <h3>Importar archivo</h3>
     <form action="">
-      <label for="">Causa</label>
-      <input type="text" name="causa" id="causa" required>
-      <button type="submit" class="btn btn-primary">Guardar</button>
+      <label for="">Base Excel</label>
+      <input type="file" name="inputImport" id="inputImport" required>
+      <button type="" class="btn btn-primary" id="btn-importBase">Guardar</button>
     </form>
   </div>
 </div>
@@ -294,6 +299,7 @@
           <label>Recomendación de Servicios</label>
           <input type="number" name="editCalificacionRS" id="editCalificacionRS" required>
 
+          <label>Estado</label>
           <select id="editCcestado" name="editCcestado" required>
             <option value="">Seleccione</option>
             <option value="PENDIENTE">PENDIENTE</option>

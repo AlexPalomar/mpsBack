@@ -9,11 +9,14 @@
 <div class="main-container my-5 align-items-center">
   <h1 class="mb-4 text-center">{{title}}</h1>
   {{> message}}
-  <div class="btn-plus-User">
-    <button type="button" class="btn btn-create" id="btn-create">Crear Usuario</button>
+  <div class="btn-plus">
+    <button type="button" class="btn btn-create btn-plus" id="btn-create">Crear Usuario</button>
+  </div>
+  <div class="scroll-top" id="scrollTop">
+    <div class="scroll-content"></div>
   </div>
   <!-- Scroll vertical y horizontal con Bootstrap -->
-  <div class="table-responsive fs-4 " style="max-height: 70vh; overflow-y: auto;">
+  <div class="table-responsive fs-4 " id="scrollBottom" style="max-height: 70vh; overflow-y: auto;">
     <div class="container">
       <form action="/adminUsers" method="POST" class="form-filter">
         <select class="" name="filter" id="filter-option">
