@@ -16,7 +16,6 @@ const session = require('express-session');
 require('./lib/passport');
 const SocketServer = require('./socketConnect');
 
-
 dotenv.config();
 
 const app = express();
@@ -98,6 +97,8 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
 // Routes
 app.use(require('./routes/authentication'));
 app.use('/api', require('./routes/messagingFCM'));
@@ -106,6 +107,9 @@ app.use(require('./routes/servicesRoutes'));
 app.use(require('./routes/usersRoutes'));
 app.use(require('./routes/cierreCicloRoutes'));
 app.use(require('./routes/reportRoutes'));
+
+
+
 
 
 // // Ruta para subir imagen
@@ -221,3 +225,4 @@ server.listen(port, () => {
   console.log(`✅ Servidor corriendo en http://0.0.0.0:${port}`);
 });
 
+module.exports = app;
