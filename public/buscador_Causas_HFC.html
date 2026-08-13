@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#000000CC">
+<title>Buscador de Causas HFC</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;color:#000000CC;font-family:Arial,Helvetica,sans-serif}
+.wrap{max-width:720px;margin:auto;padding:16px}
+.header{background:#000000CC;color:white;border-radius:18px;padding:20px 18px;margin-bottom:14px}
+.header h1{margin:0 0 7px;font-size:24px}
+.header p{margin:0;color:#d1d5db;font-size:14px;line-height:1.4}
+.searchbox{background:white;border-radius:16px;padding:14px;box-shadow:0 2px 12px rgba(0,0,0,.08);position:sticky;top:8px;z-index:3}
+#actionsSearch {display: flex;flex-wrap: wrap;gap: 10px;margin-top: 15px;}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:8px}
+input{width:100%;font-size:18px;padding:14px;border:2px solid #d1d5db;border-radius:12px;outline:none}
+input:focus{border-color:#2563eb}
+.hint{font-size:12px;color:#6b7280;margin:8px 2px 0}
+.actions{display:flex;gap:8px;margin-top:10px}
+button{border:0;border-radius:10px;padding:10px 12px;font-weight:700}
+.secondary{background:#e5e7eb;color:#000000CC}
+.results{margin-top:14px}
+.status{font-size:13px;color:#6b7280;margin:10px 2px}
+.card{background:white;border-radius:16px;padding:15px;margin:10px 0;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.badge{display:inline-block;background:#e5e7eb;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:700;margin-bottom:8px}
+.level{border-left:4px solid #9ca3af;padding-left:10px;margin:10px 0}
+.level strong{display:block;font-size:12px;color:#6b7280;text-transform:uppercase;margin-bottom:3px}
+.level .code{font-weight:800}
+.n3{border-left-color:#16a34a;background:#f0fdf4;padding:11px;border-radius:0 10px 10px 0}
+.n3 strong{color:#15803d}
+.uso{font-size:13px;line-height:1.45;color:#374151;margin-top:10px;background:#f9fafb;padding:10px;border-radius:10px}
+.empty{background:white;border-radius:16px;padding:24px;text-align:center;color:#6b7280}
+.footer{text-align:center;color:#6b7280;font-size:12px;padding:18px 5px}
+</style>
+</head>
+<body>  
+<div class="wrap">
+  <div class="header">
+    <h1>🔎 Buscador Causas de Cierre HFC</h1>
+    <p>Busca lo que realizaste en el mantenimiento y encuentra automáticamente Nivel 3, Nivel 2 y Nivel 1.</p>
+  </div>
+
+  <div class="searchbox">
+    <label for="q">¿Qué hiciste para solucionar el mantenimiento?</label>
+    <input id="q" type="search" placeholder="Ej.: modem, conector, niveles, control remoto..." autocomplete="off">
+    <div class="hint">Busca por equipo, actividad, palabra de la causa o parte de la descripción.</div>
+    <div class="actions" id="actionsSearch">
+      <button class="secondary" id="clear">Limpiar</button>
+      <button class="secondary" id="all">Ver todas</button>
+      <button class="secondary" id="pre">Premisas Cliente</button>
+      <button class="secondary" id="nor">No requiere Técnico</button>
+      <button class="secondary" id="net">Networking</button>
+      <button class="secondary" id="aco">Acometida Suscriptor</button>
+      <button class="secondary" id="equi">Equipos Terminales</button>
+    </div>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div id="results" class="results">
+    <div class="empty">Escribe una palabra para comenzar.</div>
+  </div>
+
+  <div class="footer">Herramienta de apoyo para capacitación y cierre correcto de mantenimientos HFC.</div>
+</div>
+
+<script>
+const DATA = [{"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "AND", "n3": "ANDAMIOS", "uso": "Agendamiento de Andamios para Trabajos de Operaciones"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "CRT", "n3": "CONTROL REMOTO ENTREGADO", "uso": "Para control remoto. Debe Trabajarse con Orden de Trabajo no por Llamada de Servicio"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "N08", "n3": "REDISENO EJECUTADO OK", "uso": "aplica para el cierre de llamadas de servicio creadas por ampliación de puertos"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "PRY", "n3": "PROYECTO", "uso": "Cierre de llamadas sin afectación por mantenimiento.  Corresponde a Proyectos"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "RET", "n3": "RETIRO DE EQUIPOS", "uso": "Para retiro de Equipos.  Debe Trabajarse con Orden de Trabajo no por Llamada de Servicio"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "VDX", "n3": "VALIDACION DE DX", "uso": "Aplica para cuando el tecnico identifica que es necesario agendar una visita tecnica para revisión de unidad"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "VEP", "n3": "VERIFICACIONES PYMES", "uso": "Aplica para cuando el tecnico identifica que es necesario agendar una visita tecnica para revisión de unidad"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "VER", "n3": "VERIFICACIONES BIDI", "uso": "Aplica para cuando el tecnico identifica que es necesario agendar una visita tecnica para revisión de unidad"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "VTC", "n3": "VISITA TECNICA BIDI", "uso": "Aplica para cuando el tecnico identifica que es necesario agendar una visita tecnica para revisión de unidad"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C34", "n2": "OTROS TRABAJOS", "n3c": "VTP", "n3": "VISITA TECNICA PYMES", "uso": "Aplica para cuando el tecnico identifica que es necesario agendar una visita tecnica para revisión de unidad"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C35", "n2": "MANIPULACION DE RED", "n3c": "R01", "n3": "MANIPULACION RED INTERNA", "uso": "Cuando se evidencia un problema de señal y/o ruido ocasionado por la manipulación en la red del abonado"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C35", "n2": "MANIPULACION DE RED", "n3c": "R03", "n3": "MANIPULA. PASIVO INTERNO", "uso": "Cuando un dispositivo de la red del suscriptor presenta falla afectando los servicios ocasionado por Manipulación del suscriptor"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C35", "n2": "MANIPULACION DE RED", "n3c": "R06", "n3": "PROBLEMA POR FRAUDE", "uso": "Cuando se evidencia un problema de señal y/o ruido ocasionado por la manipulación en la red del abonado.   Esta manipulación se identifica como ocasionada por un tercero"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C35", "n2": "MANIPULACION DE RED", "n3c": "R14", "n3": "MANIPULA. CABLE/CONECTOR", "uso": "Para temas de Manipula. Cable/ conector. Se debe trabajar por llamada de servicio"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C38", "n2": "SOLICITUD SERVICIO", "n3c": "L09", "n3": "CAMBIO CPE SOLICITUD CALL", "uso": "Cuando el CPE referido en la ll/s, a pesar de funcionar correctamente se debe cambiar, por las Indicaciones de servicio."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C38", "n2": "SOLICITUD SERVICIO", "n3c": "S19", "n3": "SOLICITUD  CALL CENTER", "uso": "Cuando Las Notas de la Llamada de Servicio Implican la Validación de Algún elemento en la Unidad del Suscriptor, sin que el suscriptor Manifieste requerimiento alguno."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C43", "n2": "EQUIPO SUSCRIPTOR", "n3c": "R13", "n3": "INDUCCION VOLT EQUIPO SUS", "uso": "Cuando se presentan problemas de Ruido por Inducción de Voltaje de equipos del suscriptor"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C43", "n2": "EQUIPO SUSCRIPTOR", "n3c": "S12", "n3": "FALLAEQUIPO SUS TV,PC,TEL", "uso": "Cuando se detecta que el problema no obedece al servicio de Televisión, Internet y telefonia  ofrecido por Telmex, sino que es consecuencia de Problemas Técnicos de los equipos del Cliente Requiere aprobación de supervisor Telmex"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C60", "n2": "MANEJO EQUIPOS", "n3c": "S03", "n3": "INDICACION MANEJO EQUIPOS", "uso": "Cuando se detecta que el problema no obedece al servicio de Televisión ofrecido por Telmex, sino que es consecuencia de indicarle al cliente el manejo adecuado para la utilizacion de los servicios"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C98", "n2": "RED DE CLIENTE", "n3c": "L50", "n3": "INSTALACION CABLEADO UTP", "uso": "No aplica para LLS. Cuando se instala un nuevo  punto de @ o Telefonia."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C98", "n2": "RED DE CLIENTE", "n3c": "L52", "n3": "DANO CABLE-CONECTOR UTP", "uso": "Cuando se identifica que existe un daño en el conector/cable del modem para el servicio de @ o telefonia."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C98", "n2": "RED DE CLIENTE", "n3c": "L54", "n3": "EXCESO CONEXIONES A WIFI", "uso": "Cuando se reporta lentitud e intermitencia en el servicio WIFI atribuible al cliente."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C98", "n2": "RED DE CLIENTE", "n3c": "L58", "n3": "ASESORIAS PRODUCTO CLARO", "uso": "Cuando se identifica que no hay problema con los servicios actual y se aclara el detalle del paquete que adquirio el cliente."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C98", "n2": "RED DE CLIENTE", "n3c": "S09", "n3": "CONFIGURACION ESPECIAL", "uso": "Cuando el cliente solicita una configuración de su red interna"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C99", "n2": "WIFI", "n3c": "D16", "n3": "REQ. MAYOR COBERTURA WIFI", "uso": "Cuando el cliente manifiste que el @ tiene poco alcance WIFI"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C99", "n2": "WIFI", "n3c": "D99", "n3": "DANO ROUTER/POD/EXTE WIFI", "uso": "Cuando se presenta un daño sobre el equipo de internet y requiere cambio."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C99", "n2": "WIFI", "n3c": "S16", "n3": "PROBLEMA DE CLAVE WIFI", "uso": "Cuando se identifica que el usuario olvido la contraseña y es necesario recordarla o restablecerla."}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C99", "n2": "WIFI", "n3c": "S29", "n3": "REUBICACION CPE", "uso": "Cuando se solicita reubicación del CPE y aplica solo para PYMES"}, {"n1c": "C01", "n1": "PREMISAS CLIENTE", "n2c": "C99", "n2": "WIFI", "n3c": "S30", "n3": "AJUSTE CANAL WIFI", "uso": ""}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C45", "n2": "CANCELADO", "n3c": "CDI", "n3": "CIERRE DIAGNOST NOC", "uso": "Cuando con base en el diagnosticador de NOC, se evidencia que no hay fallas en servicios DOCSIS y luego  comunicación expresa con el suscriptor, se cancela la Visita Programada. La comunicación puede ser Personal o Vía Telefónica por parte del grupo de servicio"}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C45", "n2": "CANCELADO", "n3c": "CDO", "n3": "CIERRE DIAGNOST OPERACION", "uso": "Cuando con base en el diagnosticador de NOC, se evidencia que no hay fallas en servicios DOCSIS y luego  comunicación expresa con el suscriptor, se cancela la Visita Programada. La comunicación puede ser Personal o Vía Telefónica por parte del grupo de Operaciones"}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C45", "n2": "CANCELADO", "n3c": "CIN", "n3": "SUS INCUMPLE/NO CONTACTO", "uso": "Cuando con base en políticas de completación de llamadas de servicio se aplica cierre"}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C45", "n2": "CANCELADO", "n3c": "LSC", "n3": "LLAMADA SERVICIO CANCEL", "uso": "Cuando agota tiempo de atención sin lograr por ningún medio contacto con el suscriptor. Únicamente para Uso con aprobación de Telmex, según Políticas de Completación con Causa de Cancelación"}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C45", "n2": "CANCELADO", "n3c": "S13", "n3": "VISITA CANCELADA POR CLIENTE", "uso": "Cuando por comunicación expresa del suscriptor, se cancela la Visita Programada. La comunicación puede ser Personal o Vía Telefónica."}, {"n1c": "C03", "n1": "NO REQUIERE TECNICO", "n2c": "C47", "n2": "MAL AGENDADO", "n3c": "S14", "n3": "MAL PROGRAMADO", "uso": "Cuando los requerimientos no obedecían a problemas técnicos generados por mal funcionamiento del servicio o cuando el suscriptor esta esperando algún Tipo de Upgrade o trabajo posventa, diferente al Mtto"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C33", "n2": "CAJA RELIANCE", "n3c": "K01", "n3": "PROBLEMA VOLT C.RELIANCE", "uso": "Problema de regulación eléctrica o conexión a la red eléctrica que afecta el servicio. Requiere aprobación de supervisor Telmex."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C33", "n2": "CAJA RELIANCE", "n3c": "L07", "n3": "KIT DE TAP DESHABILITADO", "uso": ""}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N01", "n3": "PROBLEMA DE VIDEO ANALOGO", "uso": "Cuando se presentan problemas por HUM, CSO, XMOD, CSB.  Fuera de parámetros según Manual de criterios O&M Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N02", "n3": "FALLA AUDIO EN CABECERA", "uso": "Cuando se presentan fallas en  audio de TV desde cabecera detectado por el NOC Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N03", "n3": "PROBLEMA CMTS", "uso": "Cuando el problema es generado desde la plataforma y a través de telemetría se encuentra que el problema no corresponde a la red del abonado Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N04", "n3": "PROBLEMA DE RED EXTERNA", "uso": "Cuando se evidencia que el problema es en la red externa luego de realizar pruebas en la en la red del abonado.  [La red Externa, Incluye problemas en MDU, Caja reliance] Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N05", "n3": "FALLA PLATAFORMA DE ATSC", "uso": "Cliente con servicio ATSC presenta problemas con el servicio."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N06", "n3": "FALLA PLATAFORMA DE DVB", "uso": "Cliente con servicio DVB presenta problemas con el servicio."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N07", "n3": "PROBLEMA PLATAFORMA NAGRA", "uso": "Cliente con servicio NAGRA presenta problemas con el servicio."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N09", "n3": "FALLA DANO RED EDIFICIO", "uso": ""}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N10", "n3": "FALLA PLATAFORMA INTERNET", "uso": "Cuando el cliente manisfiesta algun tipo de falla con el servicio de internet."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N11", "n3": "FALLA PLATAFORM TELEFONIA", "uso": "Cuando el cliente manisfiesta algun tipo de falla con el servicio de telefonia."}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C50", "n2": "PROBLEMAS PLATAFORMAS", "n3c": "N99", "n3": "FALLA ACCESO CLAROVIDEO", "uso": "Cuando el cliente manisfiesta que no puede acceder al servicio Claro Video, se debe validar asociacion del cliente plataforma DLA"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C51", "n2": "SOLUCION REMOTA", "n3c": "S23", "n3": "SOLUCION APOYO CORE TV", "uso": "Cuando se evidencia que el problema es en la Plataforma o Plataformas que controla los servicios (p.e. ATSC, DVB).  Aplican procesos de actualizaciones de Firmware, procesos de control u otros que afecten los servicios contratados. Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C51", "n2": "SOLUCION REMOTA", "n3c": "S24", "n3": "SOLUCION APOYO CORE VOZ", "uso": "Cuando se evidencia que el problema es en la Plataforma o Plataformas que controla los servicios (p.e. ATSC, DVB, Banda Ancha, Voz).  Aplican procesos de actualizaciones de Firmware, procesos de control u otros que afecten los servicios contratados. Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C51", "n2": "SOLUCION REMOTA", "n3c": "S25", "n3": "SOLUCION APOYO CORE INT@", "uso": "Cuando se evidencia que el problema es en la Plataforma o Plataformas que controla los servicios (p.e. ATSC, DVB, Banda Ancha, Voz).  Aplican procesos de actualizaciones de Firmware, procesos de control u otros que afecten los servicios contratados. Validación supervisor Telmex"}, {"n1c": "C05", "n1": "NETWORKING", "n2c": "C51", "n2": "SOLUCION REMOTA", "n3c": "T17", "n3": "FALLA CALIDAD SERV. VOZ", "uso": "Cuando se presenta baja calidad en el servicio de telefonia en las plataformas gestionadas por el NOC. Validación supervisor Telmex"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C31", "n2": "PROBLEMAS CONECTIVIDAD", "n3c": "R02", "n3": "CONECTOR SUELTO REDEXTERN", "uso": "Cuando por problemas de Instalación y/o conectorización de la red externa.(ruido o fallas de señal)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C31", "n2": "PROBLEMAS CONECTIVIDAD", "n3c": "R10", "n3": "CABLES PARTIDOS", "uso": "Cuando por problemas de Instalación y/o conectorización se ocasionan problemas  en la señal por fractura en los cables (ruido o fallas de señal)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C31", "n2": "PROBLEMAS CONECTIVIDAD", "n3c": "S01", "n3": "CONECTOR INT SUELTO/DANO", "uso": "Cuando se evidencia que la fuente de falla en cualquiera de los servicios obedece a problemas con la conectorización o el cable Drop (Incluye la revisión desde el punto de acometida, hasta los Terminales del usuario)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C32", "n2": "CAPA RF", "n3c": "I01", "n3": "AJUSTE DE NIVELES CPES", "uso": "Calibración de red abonado para garantizar niveles de RX y TX en cualquier CPE (Customer Premises Equipment)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C32", "n2": "CAPA RF", "n3c": "L55", "n3": "INSTAL. AMPLIFICADOR DROP", "uso": "Cuando se evidencian bajo niveles de señal en la red interna del suscriptor."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C32", "n2": "CAPA RF", "n3c": "L56", "n3": "CAMBIO AMPLIFICADOR DROP", "uso": "Cuando se evidencian fallas con el amplificador DROP."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C32", "n2": "CAPA RF", "n3c": "R11", "n3": "AJUSTE NIVELES TV ANALOGA", "uso": "Calibración de red abonado para garantizar niveles de RX y TX en cualquier CPE (Customer Premises Equipment)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C32", "n2": "CAPA RF", "n3c": "S18", "n3": "CABLE DROP DESCONEC TAP", "uso": "Cuando se identifica que el cable Drop presenta mala conectividad en el TAP."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C39", "n2": "PASIVOS INDOOR", "n3c": "L05", "n3": "PASIVO INTERNO DANADO", "uso": "Cuando un dispositivo de la red del suscriptor presenta falla afectando los servicios"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C39", "n2": "PASIVOS INDOOR", "n3c": "R08", "n3": "FILTRO NO INSTALADO", "uso": "Cuando se evidencia que el Problema Obedece a la NO colocación de algún Filtro  en el Momento de la Instalación y que por ende debe Instalarse uno en el Mantenimiento para Corregir el Problema (Filtro HP, Isolator, Internet y Surgender)"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C42", "n2": "RED ELECTRICA", "n3c": "L06", "n3": "DANO POWER SUPPLY CPES", "uso": "Cuando se realiza cambio exclusivo de la fuente ( o cable de Poder)  de cualquiera de los equipos de Suscriptor suministrados por Telmex"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C42", "n2": "RED ELECTRICA", "n3c": "S07", "n3": "FALLA VOLTAJE EN CLIENTE", "uso": "Cuando se evidencia problemas en la red electrica interna del suscriptor."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C70", "n2": "PROBLEMA OTRAS CONEXIONES", "n3c": "R12", "n3": "INTERRUPTOR AB EN DANO", "uso": "Cuando el interruptor del switch AB presenta daño y requiere cambio del dispositivo."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C70", "n2": "PROBLEMA OTRAS CONEXIONES", "n3c": "S20", "n3": "INSTAL/CAMBIO CABLE HDMI", "uso": "Cuando el problema obedece a que en el momento de la Instalación de los equipos con Interfaz HDMI no se hizo entrega del Mismo, o cuando se detecta que los problemas de Servicio Obedecen a Problemas de Calidad o daño  de dicho cable"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C70", "n2": "PROBLEMA OTRAS CONEXIONES", "n3c": "S21", "n3": "INSTAL/CAMBIO CABLE RCA", "uso": "Cuando el problema obedece a que en el momento de la Instalación de los equipos con Interfaz RCA no se hizo entrega del Mismo, o cuando se detecta que los problemas de Servicio Obedecen a Problemas de Calidad o daño  de dicho cable."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C70", "n2": "PROBLEMA OTRAS CONEXIONES", "n3c": "SAB", "n3": "INST.SWITCH CONMUTABLE AB", "uso": "Cuando se presentan problemas con el switch AB ocasionando falla en servicio de TV."}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C80", "n2": "CAPA FÍSICA TELEFONIA", "n3c": "T01", "n3": "DANO CABLEADO TELEFONICO", "uso": "Cuando se evidencia que la fuente de falla en el servicio obedece a problemas con el cable Telefónico"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C80", "n2": "CAPA FÍSICA TELEFONIA", "n3c": "T04", "n3": "DANO CONECTOR TELEFONICO", "uso": "Cuando se evidencia que la fuente de falla en el servicio obedece a problemas al conector telefonico"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C80", "n2": "CAPA FÍSICA TELEFONIA", "n3c": "T05", "n3": "DANO EN TOMA TELEFONICA", "uso": "Cuando se evidencia que la fuente de falla en el servicio obedece a problemas con Tomas telefónicas"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C80", "n2": "CAPA FÍSICA TELEFONIA", "n3c": "T10", "n3": "DANO PUERTO VOZ MTA", "uso": "Cuando el puerto de voz del MTA presenta falla y se valida si es posible cambiar la conexión a otro puerto disponible o cambiar el MTA"}, {"n1c": "C08", "n1": "ACOMETIDA SUSCRIPTOR", "n2c": "C90", "n2": "SENAL OK", "n3c": "S10", "n3": "SERV. PROBADO SIN FALLA", "uso": "Cuando se identifica que ninguno de los servicios presenta problemas"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "D47", "n3": "ATA-GRANDSTR. DANADO", "uso": "Cuando se debe realizar cambio de DECO ATA-GRAND debido a problemas con el equipo."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "D48", "n3": "FALLA FIRMWARE ATA-GRAND", "uso": "Cuando se debe realizar cambio de DECO ATA-GRAND debido a problemas con el archivo de configuración , debido a la interrupción de la conexión a la red HFC, para actualización de firmware."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "D49", "n3": "FALLA FIRMWARE STB", "uso": "Cuando se debe realizar cambio de DECO STB debido a problemas con el archivo de configuración , debido a la interrupción de la conexión a la red HFC, para actualización de firmware."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "D50", "n3": "SMARTCARD DANADA", "uso": "Cuando se realiza cambio de la tarjeta smartcard por afectación de servicios de TV."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "L02", "n3": "CAMBIO DECO DANADO", "uso": "Cuando se realiza cambio de decodificador [ATSC o DVB, STBs Básicas o Digitales]  por daño, luego de tener aprobación para cambio por parte del supervisor de Telmex"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "L03", "n3": "CAMBIO MODEM DANADO", "uso": "Cuando se realiza cambio de Cable modem, luego de tener aprobación para cambio por parte del supervisor de Telmex"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "L13", "n3": "CAMBIO MTA DANADO", "uso": "Cuando se realiza cambio de MTA, luego de tener aprobación para cambio por parte del supervisor de Telmex"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "L81", "n3": "CAMBIO TV PLAYER DANADO", "uso": "Cuando se realiza cambio de TV PLAYER, luego de tener aprobación para cambio por parte del supervisor de Telmex"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C30", "n2": "CPE", "n3c": "T14", "n3": "PROBLEMAS FIRMWARE CM-MTA", "uso": "Cuando se debe realizar cambio de MTA debido a problemas con el archivo de configuración , debido a la interrupción de la conexión a la red HFC, para actualización de firmware."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C41", "n2": "CONTROL REMOTO", "n3c": "F33", "n3": "C.REMOTO DESCONFIGURADO", "uso": "Cuando se debe realizar configuración de control remoto."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C41", "n2": "CONTROL REMOTO", "n3c": "L01", "n3": "CAMBIO CONTROL DANADO", "uso": "Cuando se debe realizar cambio de  control remoto debido a problemas con el funcionamiento."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C41", "n2": "CONTROL REMOTO", "n3c": "S02", "n3": "BATERIAS CONTROL REMOTO", "uso": "Cuando se identifica que es necesario cambiar las baterias del control remoto del decodificador."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C48", "n2": "PROVISIONING", "n3c": "D95", "n3": "ENVIO COMANDO  (RR-MG)", "uso": "Cuando se identifica que hay algun error de aprovisionamiento o se requiere un reinicio remoto a alguno de los equipos para restablecer el servicio."}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C48", "n2": "PROVISIONING", "n3c": "S15", "n3": "SERVICIO NO APROVISIONADO", "uso": "Cuando No se detecta Ningún problema físico en la Acometida del Cliente y al realizar la validación con el radio Operador se Detecta que los servicios No estaban aprovisionados Correctamente"}, {"n1c": "C09", "n1": "EQUIPOS TERMINALES", "n2c": "C48", "n2": "PROVISIONING", "n3c": "S22", "n3": "REINICIO FISICO STB", "uso": "Cuando se evidencia bloqueo o mal funcionamiento del decodificador y requiere reinicio."}];
+
+const q = document.getElementById('q');
+const results = document.getElementById('results');
+const status = document.getElementById('status');
+const actionsSearch = document.getElementById('actionsSearch');
+
+function norm(s) {
+  return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+
+function score(item, terms) {
+  const n3 = norm(item.n3), n2 = norm(item.n2), n1 = norm(item.n1), uso = norm(item.uso);
+  const all = [n3,n2,n1,uso].join(' ');
+  let s = 0;
+  for (const t of terms) {
+    if (!t) continue;
+    if (n3.includes(t)) s += 12;
+    if (n2.includes(t)) s += 8;
+    if (n1.includes(t)) s += 5;
+    if (uso.includes(t)) s += 3;
+    if (all.includes(t)) s += 1;
+  }
+  return s;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function render(list, title) {
+  status.textContent = title || '';
+  if (!list.length) {
+    results.innerHTML = '<div class="empty">No encontré una causa con esas palabras.<br><br>Prueba con una palabra más corta, por ejemplo: <b>modem</b>, <b>cable</b>, <b>ruido</b>, <b>control</b>, <b>decodificador</b>.</div>';
+    return;
+  }
+  results.innerHTML = list.map((x,i) => `
+    <div class="card">
+      <span class="badge">Resultado ${i+1}</span>
+
+      <div class="level n3">
+        <strong>Nivel 3 — causa específica</strong>
+        <span class="code">${esc(x.n3c)} — ${esc(x.n3)}</span>
+      </div>
+
+      <div class="level">
+        <strong>Nivel 2</strong>
+        <span class="code">${esc(x.n2c)} — ${esc(x.n2)}</span>
+      </div>
+
+      <div class="level">
+        <strong>Nivel 1</strong>
+        <span class="code">${esc(x.n1c)} — ${esc(x.n1)}</span>
+      </div>
+
+      <div class="uso"><b>¿Cuándo aplica?</b><br>${esc(x.uso)}</div>
+    </div>
+  `).join('');
+}
+
+function search() {
+  const text = norm(q.value.trim());
+  if (!text) {
+    results.innerHTML = '<div class="empty">Escribe una palabra para comenzar.</div>';
+    status.textContent = '';
+    return;
+  }
+  const terms = text.split(/\s+/).filter(Boolean);
+  const ranked = DATA.map(x => ({x, s:score(x,terms)}))
+    .filter(o => o.s > 0)
+    .sort((a,b) => b.s-a.s || a.x.n3.localeCompare(b.x.n3))
+    .slice(0,20)
+    .map(o => o.x);
+  render(ranked, ranked.length + ' coincidencia(s) encontrada(s)');
+}
+
+actionsSearch.addEventListener('click', (e) => {
+  const accionClickeado = e.target;
+  accionClickeado.style.border = '1px solid black';
+  accionClickeado.innerText == 'Limpiar' ? q.value='' : q.value= accionClickeado.innerText;
+  search({ target: q });
+  setTimeout(() => {
+    accionClickeado.style.border = 'none';
+  }, 3000);
+});
+
+q.addEventListener('input', search);
+document.getElementById('clear').onclick = () => { q.value=''; q.focus(); search(); };
+document.getElementById('all').onclick = () => {
+  render(DATA, DATA.length + ' causas disponibles');
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+</script>
+</body>
+</html>
