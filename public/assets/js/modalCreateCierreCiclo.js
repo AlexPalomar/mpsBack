@@ -116,7 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
               containerBreadcrumb.innerHTML = html;
               setTimeout(()=> {
                 containerBreadcrumb.style.display = 'none';
+<<<<<<< HEAD
                 window.location.href = "https://web-w1dz87nli1ku.up-de-fra1-k8s-1.apps.run-on-seenode.com/cierreCiclo";
+=======
+                window.location.href = "http://localhost/cierreCiclo";
+>>>>>>> main-v2
               }, 5000);
 
             } else {
